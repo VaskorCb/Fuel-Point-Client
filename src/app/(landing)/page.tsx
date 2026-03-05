@@ -335,95 +335,203 @@ export default function LandingPage() {
           position: 'relative',
           overflow: 'hidden',
           minHeight: { xs: 'calc(100vh - 64px)', md: 'auto' },
-          py: { xs: 8, md: 14 },
+          py: { xs: 10, md: 16 },
           display: 'flex',
           alignItems: 'center',
           background: (theme) =>
             theme.palette.mode === 'dark'
-              ? `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, transparent 60%)`
-              : `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, transparent 60%)`,
+              ? `radial-gradient(ellipse 80% 60% at 50% -10%, ${alpha(theme.palette.primary.main, 0.18)} 0%, transparent 70%), linear-gradient(180deg, ${alpha(theme.palette.background.default, 1)} 0%, ${alpha(theme.palette.background.paper, 1)} 100%)`
+              : `radial-gradient(ellipse 80% 60% at 50% -10%, ${alpha(theme.palette.primary.main, 0.12)} 0%, transparent 70%), linear-gradient(180deg, #f8faff 0%, #ffffff 100%)`,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: (theme) =>
+              `radial-gradient(${alpha(theme.palette.primary.main, 0.06)} 1px, transparent 1px)`,
+            backgroundSize: '32px 32px',
+            opacity: 0.6,
+          },
         }}
       >
+        {/* Animated floating orbs */}
         <Box
           sx={{
             position: 'absolute',
-            top: -100,
-            right: -100,
-            width: 400,
-            height: 400,
+            top: { xs: -60, md: -120 },
+            right: { xs: -40, md: -80 },
+            width: { xs: 300, md: 500 },
+            height: { xs: 300, md: 500 },
             borderRadius: '50%',
-            background: (theme) => alpha(theme.palette.primary.main, 0.12),
-            filter: 'blur(80px)',
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: -80,
-            left: -80,
-            width: 300,
-            height: 300,
-            borderRadius: '50%',
-            background: (theme) => alpha(theme.palette.primary.main, 0.08),
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.primary.main, 0.2)} 0%, ${alpha(theme.palette.primary.light, 0.05)} 70%, transparent 100%)`,
             filter: 'blur(60px)',
+            animation: 'heroFloat 8s ease-in-out infinite',
+            '@keyframes heroFloat': {
+              '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+              '50%': { transform: 'translate(-30px, 20px) scale(1.05)' },
+            },
           }}
         />
-        <Container maxWidth="lg" sx={{ position: 'relative' }}>
-          <Box sx={{ textAlign: 'center', maxWidth: 720, mx: 'auto' }}>
-            <Typography
-              component="span"
-              variant="overline"
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: { xs: -40, md: -100 },
+            left: { xs: -60, md: -120 },
+            width: { xs: 250, md: 400 },
+            height: { xs: 250, md: 400 },
+            borderRadius: '50%',
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.secondary?.main || theme.palette.primary.main, 0.15)} 0%, transparent 70%)`,
+            filter: 'blur(80px)',
+            animation: 'heroFloat2 10s ease-in-out infinite',
+            '@keyframes heroFloat2': {
+              '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+              '50%': { transform: 'translate(20px, -25px) scale(1.08)' },
+            },
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '40%',
+            left: '15%',
+            width: 200,
+            height: 200,
+            borderRadius: '50%',
+            background: (theme) => alpha(theme.palette.primary.main, 0.06),
+            filter: 'blur(50px)',
+            display: { xs: 'none', md: 'block' },
+            animation: 'heroFloat3 12s ease-in-out infinite',
+            '@keyframes heroFloat3': {
+              '0%, 100%': { transform: 'translate(0, 0)' },
+              '33%': { transform: 'translate(15px, -20px)' },
+              '66%': { transform: 'translate(-10px, 15px)' },
+            },
+          }}
+        />
+
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ textAlign: 'center', maxWidth: 780, mx: 'auto' }}>
+            {/* Badge */}
+            <Box
               sx={{
-                display: 'inline-block',
-                color: 'primary.main',
-                fontWeight: 700,
-                letterSpacing: 2,
-                mb: 2,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 1,
+                px: 2.5,
+                py: 0.75,
+                borderRadius: 10,
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+                border: '1px solid',
+                borderColor: (theme) => alpha(theme.palette.primary.main, 0.15),
+                mb: 3,
+                backdropFilter: 'blur(10px)',
+                animation: 'fadeInUp 0.8s ease-out',
+                '@keyframes fadeInUp': {
+                  from: { opacity: 0, transform: 'translateY(20px)' },
+                  to: { opacity: 1, transform: 'translateY(0)' },
+                },
               }}
             >
-              Petrol pump management
-            </Typography>
+              <Box
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  bgcolor: 'success.main',
+                  boxShadow: (theme) => `0 0 8px ${theme.palette.success.main}`,
+                  animation: 'pulse 2s ease-in-out infinite',
+                  '@keyframes pulse': {
+                    '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+                    '50%': { opacity: 0.6, transform: 'scale(1.3)' },
+                  },
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{ fontWeight: 700, color: 'primary.main', letterSpacing: 1 }}
+              >
+                PETROL PUMP MANAGEMENT
+              </Typography>
+            </Box>
+
+            {/* Title with 3D text effect */}
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                fontSize: { xs: '2.75rem', sm: '3.75rem', md: '4.5rem' },
                 fontWeight: 800,
-                lineHeight: 1.15,
-                letterSpacing: '-0.02em',
-                mb: 2,
+                lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                mb: 2.5,
+                animation: 'fadeInUp 0.8s ease-out 0.1s both',
               }}
             >
               Run your fuel station
               <br />
-              <Box component="span" sx={{ color: 'primary.main' }}>
+              <Box
+                component="span"
+                sx={{
+                  position: 'relative',
+                  color: 'primary.main',
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 50%, ${theme.palette.primary.main} 100%)`,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: 'none',
+                }}
+              >
                 smarter, not harder
               </Box>
             </Typography>
+
             <Typography
               variant="h6"
               color="text.secondary"
               sx={{
                 fontWeight: 400,
-                fontSize: { xs: '1rem', md: '1.25rem' },
-                lineHeight: 1.6,
-                mb: 4,
+                fontSize: { xs: '1.05rem', md: '1.3rem' },
+                lineHeight: 1.65,
+                mb: 5,
+                maxWidth: 600,
+                mx: 'auto',
+                animation: 'fadeInUp 0.8s ease-out 0.2s both',
               }}
             >
               Sales, shifts, tanks, credits, and reports — all in one place.
               Start your free trial today.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+
+            {/* CTA buttons with glow */}
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                animation: 'fadeInUp 0.8s ease-out 0.3s both',
+              }}
+            >
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => router.push(paths.signup)}
                 endIcon={<IconifyIcon icon="solar:arrow-right-bold" />}
                 sx={{
-                  px: 3,
-                  py: 1.5,
-                  fontSize: '1rem',
+                  px: 4,
+                  py: 1.75,
+                  fontSize: '1.05rem',
                   fontWeight: 700,
-                  borderRadius: 2,
+                  borderRadius: 2.5,
+                  boxShadow: (theme) =>
+                    `0 8px 32px ${alpha(theme.palette.primary.main, 0.35)}, 0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: (theme) =>
+                      `0 12px 40px ${alpha(theme.palette.primary.main, 0.45)}, 0 4px 12px ${alpha(theme.palette.primary.main, 0.25)}`,
+                  },
                 }}
               >
                 Start free trial
@@ -433,15 +541,88 @@ export default function LandingPage() {
                 size="large"
                 onClick={() => router.push(paths.login)}
                 sx={{
-                  px: 3,
-                  py: 1.5,
-                  fontSize: '1rem',
+                  px: 4,
+                  py: 1.75,
+                  fontSize: '1.05rem',
                   fontWeight: 600,
-                  borderRadius: 2,
+                  borderRadius: 2.5,
+                  borderWidth: 1.5,
+                  backdropFilter: 'blur(10px)',
+                  bgcolor: (theme) => alpha(theme.palette.background.paper, 0.5),
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    borderWidth: 1.5,
+                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.8),
+                  },
                 }}
               >
                 Sign in
               </Button>
+            </Box>
+
+            {/* Floating 3D feature cards */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                justifyContent: 'center',
+                gap: 3,
+                mt: 8,
+                perspective: '1200px',
+                animation: 'fadeInUp 0.8s ease-out 0.5s both',
+              }}
+            >
+              {[
+                { icon: 'solar:gas-station-bold', label: 'Pump Management', color: '#6366f1' },
+                { icon: 'solar:chart-2-bold', label: 'Live Dashboard', color: '#10b981' },
+                { icon: 'solar:wallet-money-bold', label: 'Credit Tracking', color: '#f59e0b' },
+                { icon: 'solar:document-bold', label: 'Auto Reports', color: '#ef4444' },
+              ].map((item, i) => (
+                <Box
+                  key={item.label}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    px: 2.5,
+                    py: 1.5,
+                    borderRadius: 3,
+                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.7),
+                    border: '1px solid',
+                    borderColor: (theme) => alpha(theme.palette.divider, 0.5),
+                    backdropFilter: 'blur(20px)',
+                    boxShadow: (theme) =>
+                      `0 8px 32px ${alpha(theme.palette.common.black, 0.06)}, 0 2px 8px ${alpha(theme.palette.common.black, 0.04)}`,
+                    transform: `rotateX(5deg) rotateY(${i < 2 ? '-' : ''}${i === 0 || i === 3 ? '6' : '2'}deg) translateZ(${i === 1 || i === 2 ? '20px' : '0px'})`,
+                    transition: 'all 0.4s ease',
+                    cursor: 'default',
+                    '&:hover': {
+                      transform: 'rotateX(0deg) rotateY(0deg) translateZ(30px) translateY(-6px)',
+                      boxShadow: (theme) =>
+                        `0 16px 48px ${alpha(item.color, 0.15)}, 0 4px 12px ${alpha(theme.palette.common.black, 0.08)}`,
+                      borderColor: alpha(item.color, 0.3),
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      bgcolor: alpha(item.color, 0.1),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <IconifyIcon icon={item.icon} sx={{ fontSize: 22, color: item.color }} />
+                  </Box>
+                  <Typography variant="body2" sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                    {item.label}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Box>
         </Container>

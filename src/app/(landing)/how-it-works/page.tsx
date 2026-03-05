@@ -265,51 +265,117 @@ export default function HowItWorksPage() {
         sx={{
           position: 'relative',
           overflow: 'hidden',
-          py: { xs: 8, md: 12 },
+          py: { xs: 10, md: 14 },
           background: (theme) =>
             theme.palette.mode === 'dark'
-              ? `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, transparent 70%)`
-              : `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, transparent 70%)`,
+              ? `radial-gradient(ellipse 80% 50% at 50% -10%, ${alpha(theme.palette.primary.main, 0.18)} 0%, transparent 70%), linear-gradient(180deg, ${alpha(theme.palette.background.default, 1)} 0%, ${alpha(theme.palette.background.paper, 1)} 100%)`
+              : `radial-gradient(ellipse 80% 50% at 50% -10%, ${alpha(theme.palette.primary.main, 0.12)} 0%, transparent 70%), linear-gradient(180deg, #f8faff 0%, #ffffff 100%)`,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: (theme) =>
+              `radial-gradient(${alpha(theme.palette.primary.main, 0.06)} 1px, transparent 1px)`,
+            backgroundSize: '32px 32px',
+            opacity: 0.6,
+          },
         }}
       >
+        {/* Floating orbs */}
         <Box
           sx={{
             position: 'absolute',
-            top: -120,
-            right: -120,
-            width: 500,
-            height: 500,
+            top: -100,
+            right: -100,
+            width: { xs: 300, md: 450 },
+            height: { xs: 300, md: 450 },
             borderRadius: '50%',
-            background: (theme) => alpha(theme.palette.primary.main, 0.08),
-            filter: 'blur(100px)',
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.primary.main, 0.18)} 0%, transparent 70%)`,
+            filter: 'blur(60px)',
+            animation: 'heroFloat 8s ease-in-out infinite',
+            '@keyframes heroFloat': {
+              '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+              '50%': { transform: 'translate(-25px, 15px) scale(1.05)' },
+            },
           }}
         />
-        <Container maxWidth="md" sx={{ position: 'relative' }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: -60,
+            left: -80,
+            width: 350,
+            height: 350,
+            borderRadius: '50%',
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.primary.light, 0.12)} 0%, transparent 70%)`,
+            filter: 'blur(70px)',
+            animation: 'heroFloat2 10s ease-in-out infinite',
+            '@keyframes heroFloat2': {
+              '0%, 100%': { transform: 'translate(0, 0)' },
+              '50%': { transform: 'translate(20px, -20px) scale(1.06)' },
+            },
+          }}
+        />
+
+        <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Typography
-              variant="overline"
+            {/* Badge */}
+            <Box
               sx={{
-                display: 'inline-block',
-                color: 'primary.main',
-                fontWeight: 700,
-                letterSpacing: 2,
-                mb: 2,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 1,
+                px: 2.5,
+                py: 0.75,
+                borderRadius: 10,
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+                border: '1px solid',
+                borderColor: (theme) => alpha(theme.palette.primary.main, 0.15),
+                mb: 3,
+                backdropFilter: 'blur(10px)',
+                animation: 'fadeInUp 0.8s ease-out',
+                '@keyframes fadeInUp': {
+                  from: { opacity: 0, transform: 'translateY(20px)' },
+                  to: { opacity: 1, transform: 'translateY(0)' },
+                },
               }}
             >
-              Complete guide
-            </Typography>
+              <IconifyIcon
+                icon="solar:book-bookmark-bold"
+                sx={{ fontSize: 16, color: 'primary.main' }}
+              />
+              <Typography
+                variant="caption"
+                sx={{ fontWeight: 700, color: 'primary.main', letterSpacing: 1 }}
+              >
+                COMPLETE GUIDE
+              </Typography>
+            </Box>
+
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.25rem', sm: '3rem', md: '3.5rem' },
+                fontSize: { xs: '2.5rem', sm: '3.25rem', md: '3.75rem' },
                 fontWeight: 800,
-                lineHeight: 1.15,
-                letterSpacing: '-0.02em',
-                mb: 2,
+                lineHeight: 1.1,
+                letterSpacing: '-0.03em',
+                mb: 2.5,
+                animation: 'fadeInUp 0.8s ease-out 0.1s both',
               }}
             >
               How Fuel Point works{' '}
-              <Box component="span" sx={{ color: 'primary.main' }}>
+              <Box
+                component="span"
+                sx={{
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 50%, ${theme.palette.primary.main} 100%)`,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
                 from start to finish
               </Box>
             </Typography>
@@ -318,15 +384,64 @@ export default function HowItWorksPage() {
               color="text.secondary"
               sx={{
                 fontWeight: 400,
-                fontSize: { xs: '1rem', md: '1.2rem' },
-                lineHeight: 1.6,
+                fontSize: { xs: '1.05rem', md: '1.25rem' },
+                lineHeight: 1.65,
                 maxWidth: 640,
                 mx: 'auto',
+                animation: 'fadeInUp 0.8s ease-out 0.2s both',
               }}
             >
               New to Fuel Point? This guide walks you through every step — from creating your
               account to generating your first profit report. No technical knowledge required.
             </Typography>
+
+            {/* Phase indicators */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                justifyContent: 'center',
+                gap: 1.5,
+                mt: 5,
+                animation: 'fadeInUp 0.8s ease-out 0.4s both',
+              }}
+            >
+              {PROCESS_SECTIONS.map((s) => (
+                <Box
+                  key={s.phase}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.75,
+                    px: 1.5,
+                    py: 0.75,
+                    borderRadius: 2,
+                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.7),
+                    border: '1px solid',
+                    borderColor: (theme) => alpha(theme.palette.divider, 0.5),
+                    backdropFilter: 'blur(10px)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'default',
+                    '&:hover': {
+                      borderColor: s.color,
+                      bgcolor: alpha(s.color, 0.05),
+                      transform: 'translateY(-2px)',
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      bgcolor: s.color,
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>
+                    {s.phase}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Container>
       </Box>
