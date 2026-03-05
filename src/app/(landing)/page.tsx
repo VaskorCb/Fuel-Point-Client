@@ -229,7 +229,10 @@ export default function LandingPage() {
         sx={{
           position: 'relative',
           overflow: 'hidden',
+          minHeight: { xs: '100vh', md: 'auto' },
           py: { xs: 8, md: 14 },
+          display: 'flex',
+          alignItems: 'center',
           background: (theme) =>
             theme.palette.mode === 'dark'
               ? `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, transparent 60%)`
