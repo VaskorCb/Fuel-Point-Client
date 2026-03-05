@@ -7,6 +7,9 @@ import ForgotPasswordForm from 'components/sections/authentications/common/Forgo
 
 const page = () => {
   const handleSendResetLink = async ({ email }: { email: string }) => {
+    if (!firebaseAuth) {
+      throw new Error('Firebase is not configured. Add valid Firebase credentials to .env');
+    }
     return await sendPasswordResetEmail(firebaseAuth, email).catch((error) => {
       throw new Error(error.message);
     });

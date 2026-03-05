@@ -15,6 +15,9 @@ export const firebaseLoginProviderConfig = {
   },
 
   async authorize(credentials: Record<'email' | 'password', string> | undefined): Promise<any> {
+    if (!firebaseAuth) {
+      throw new Error('Firebase is not configured. Add valid Firebase credentials to .env');
+    }
     if (credentials) {
       try {
         const userCredential = await signInWithEmailAndPassword(
@@ -52,6 +55,9 @@ export const firebaseSignupProviderConfig = {
   async authorize(
     credentials: Record<'email' | 'password' | 'name', string> | undefined,
   ): Promise<any> {
+    if (!firebaseAuth) {
+      throw new Error('Firebase is not configured. Add valid Firebase credentials to .env');
+    }
     if (credentials) {
       try {
         const userCredential = await createUserWithEmailAndPassword(

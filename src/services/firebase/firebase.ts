@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { type FirebaseApp, initializeApp } from 'firebase/app';
+import { type Auth, getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,6 +10,14 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
-export const firebaseAuth = getAuth(firebaseApp);
-export const currentUser = firebaseAuth.currentUser;
+const hasValidFirebaseConfig =
+  firebaseConfig.apiKey &&
+  firebaseConfig.apiKey !== 'your_api_key' &&
+  firebaseConfig.projectId &&
+  firebaseConfig.projectId !== 'your_project_id';
+
+export const firebaseApp: FirebaseApp | null = hasValidFirebaseConfig
+  ? initializeApp(firebaseConfig)
+  : null;
+export const firebaseAuth: Auth | null = firebaseApp ? getAuth(firebaseApp) : null;
+export const currentUser = firebaseAuth?.currentUser ?? null;
