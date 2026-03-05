@@ -46,7 +46,9 @@ const LoginForm = ({
       onSuccess: (response) => {
         toast.success('Welcome back!');
         const user = response.data?.user;
-        if (user && !user.onboardingDone) {
+        if (user?.role === 'PLATFORM_OWNER') {
+          router.push('/platform-admin');
+        } else if (user && !user.onboardingDone) {
           router.push('/onboarding');
         } else {
           router.push(callbackUrl || '/dashboard');

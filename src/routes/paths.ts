@@ -46,6 +46,7 @@ const paths = {
   // Platform Admin
   platformAdmin: '/platform-admin',
   platformAdminSubscriptions: '/platform-admin/subscriptions',
+  platformAdminUsers: '/platform-admin/users',
 
   notifications: `/${rootPaths.pagesRoot}/notifications`,
   404: `/${rootPaths.errorRoot}/404`,
@@ -146,6 +147,8 @@ export const apiEndpoints = {
   dashboardSalesChart: '/dashboard/sales-chart',
   dashboardTankLevels: '/dashboard/tank-levels',
   dashboardCreditOverview: '/dashboard/credit-overview',
+  dashboardPlatformSalesSummary: '/dashboard/platform/sales-summary',
+  dashboardPlatformSalesChart: '/dashboard/platform/sales-chart',
 
   // Subscriptions
   subscriptionTrial: '/subscriptions/trial',

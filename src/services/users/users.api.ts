@@ -29,6 +29,10 @@ export const getOwnersApi = (): Promise<ApiResponse<any[]>> => {
   return axiosInstance.get(apiEndpoints.owners);
 };
 
+export const getAllUsersApi = (): Promise<ApiResponse<any[]>> => {
+  return axiosInstance.get(apiEndpoints.getUsers);
+};
+
 export const getPlatformStatsApi = (): Promise<ApiResponse<any>> => {
   return axiosInstance.get(apiEndpoints.platformStats);
 };

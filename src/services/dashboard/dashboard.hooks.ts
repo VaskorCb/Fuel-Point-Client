@@ -7,6 +7,8 @@ import {
   getSalesChartApi,
   getTankLevelsApi,
   getCreditOverviewApi,
+  getPlatformSalesSummaryApi,
+  getPlatformSalesChartApi,
 } from './dashboard.api';
 
 export const useDashboardSummary = () => {
@@ -37,5 +39,21 @@ export const useCreditOverview = () => {
   return useQuery({
     queryKey: [...queryKeys.dashboard.creditOverview],
     queryFn: () => getCreditOverviewApi(),
+  });
+};
+
+export const usePlatformSalesSummary = () => {
+  return useQuery({
+    queryKey: ['dashboard', 'platform', 'sales-summary'],
+    queryFn: () => getPlatformSalesSummaryApi(),
+    refetchInterval: 60000,
+  });
+};
+
+export const usePlatformSalesChart = (period: string) => {
+  return useQuery({
+    queryKey: ['dashboard', 'platform', 'sales-chart', period],
+    queryFn: () => getPlatformSalesChartApi(period),
+    enabled: !!period,
   });
 };

@@ -80,6 +80,7 @@ export const queryKeys = {
     team: ['users', 'team'] as const,
     owners: ['users', 'owners'] as const,
     platformStats: ['users', 'platform-stats'] as const,
+    all: ['users', 'all'] as const,
   },
   subscriptions: {
     current: ['subscriptions', 'current'] as const,

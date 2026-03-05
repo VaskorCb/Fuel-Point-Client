@@ -53,6 +53,14 @@ const PlatformAdminLayout = ({ children }: PropsWithChildren) => {
         </Button>
         <Button
           component={Link}
+          href="/platform-admin/users"
+          size="small"
+          variant={pathname === '/platform-admin/users' ? 'contained' : 'text'}
+        >
+          Users
+        </Button>
+        <Button
+          component={Link}
           href="/platform-admin/subscriptions"
           size="small"
           variant={pathname === '/platform-admin/subscriptions' ? 'contained' : 'text'}

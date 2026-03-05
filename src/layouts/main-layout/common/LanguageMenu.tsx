@@ -54,13 +54,14 @@ const LanguageMenu = ({ type = 'default' }: LanguageMenuProps) => {
           gap: { xs: 0, sm: 1 },
           minWidth: 'auto',
           minHeight: { xs: 36, sm: 'auto' },
-          backgroundColor: 'rgba(255, 255, 255, 0.12)',
-          borderColor: 'rgba(255, 255, 255, 0.30)',
-          borderWidth: 1,
+          border: '1px solid',
+          borderColor: 'divider',
           borderRadius: 1,
+          bgcolor: 'background.paper',
+          color: 'text.primary',
           '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.12)',
-            borderColor: 'rgba(255, 255, 255, 0.30)',
+            bgcolor: 'action.hover',
+            borderColor: 'divider',
           },
         })}
       >
@@ -70,21 +71,21 @@ const LanguageMenu = ({ type = 'default' }: LanguageMenuProps) => {
         />
         <Typography
           variant="subtitle2"
-          sx={(theme) => ({
-            color: theme.palette.neutral.contrastText,
+          sx={{
+            color: 'text.primary',
             display: { xs: 'none', sm: 'block' },
-          })}
+          }}
         >
           {selectedLanguage.label}
         </Typography>
         <IconifyIcon
           icon="eva:chevron-down-fill"
-          sx={(theme) => ({
+          sx={{
             fontSize: { xs: 16, sm: type === 'slim' ? 16 : 24 },
             transition: 'transform 0.2s',
             transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-            color: theme.palette.neutral.contrastText,
-          })}
+            color: 'text.primary',
+          }}
         />
       </Button>
       <Menu
