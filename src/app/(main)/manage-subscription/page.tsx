@@ -486,7 +486,6 @@ export default function ManageSubscriptionPage() {
               <Button
                 variant="contained"
                 color="primary"
-                sx={{ flex: 1, minWidth: 0 }}
                 disabled={createSubscription.isPending}
                 onClick={handleSubscribe}
                 startIcon={
@@ -497,6 +496,8 @@ export default function ManageSubscriptionPage() {
                   )
                 }
                 sx={{
+                  flex: 1,
+                  minWidth: 0,
                   textTransform: 'none',
                   fontWeight: 700,
                   py: 1.25,
