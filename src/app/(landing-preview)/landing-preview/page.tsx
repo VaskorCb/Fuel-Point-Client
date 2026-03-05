@@ -256,7 +256,7 @@ export default function LandingPreviewPage() {
         sx={{
           position: 'relative',
           overflow: 'hidden',
-          minHeight: { xs: '100vh', md: 'auto' },
+          minHeight: { xs: 'calc(100vh - 72px)', md: 'auto' },
           pt: { xs: 14, md: 18 },
           pb: { xs: 10, md: 16 },
           display: 'flex',

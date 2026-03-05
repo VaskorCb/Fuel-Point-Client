@@ -229,7 +229,7 @@ export default function LandingPage() {
         sx={{
           position: 'relative',
           overflow: 'hidden',
-          minHeight: { xs: '100vh', md: 'auto' },
+          minHeight: { xs: 'calc(100vh - 64px)', md: 'auto' },
           py: { xs: 8, md: 14 },
           display: 'flex',
           alignItems: 'center',
