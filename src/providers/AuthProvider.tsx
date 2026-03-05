@@ -10,7 +10,7 @@ import { queryKeys } from 'services/queryKeys';
 import { getProfileApi } from 'services/auth/auth.api';
 import PageLoader from 'components/loading/PageLoader';
 
-const AUTH_ROUTES = ['/sign-in', '/sign-up', '/forgot-password', '/2fa', '/set-password', '/logged-out', '/landing-preview'];
+const AUTH_ROUTES = ['/sign-in', '/sign-up', '/forgot-password', '/2fa', '/set-password', '/logged-out', '/landing-preview', '/how-it-works'];
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const setUser = useSetAtom(userAtom);
