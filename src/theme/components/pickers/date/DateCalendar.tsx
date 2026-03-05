@@ -1,4 +1,5 @@
 import { Button, ComponentsOverrides, Stack, Theme } from '@mui/material';
+import dayjs from 'dayjs';
 import { Components } from '@mui/material/styles';
 import {
   type DateCalendarProps,
@@ -33,8 +34,9 @@ const DateCalendar: Components<Omit<Theme, 'components'>>['MuiDateCalendar'] = {
       calendarHeader: (props) => {
         const { currentMonth, onMonthChange, onViewChange, view } = props;
 
-        const selectNextMonth = () => onMonthChange(currentMonth.add(1, 'month'));
-        const selectPreviousMonth = () => onMonthChange(currentMonth.subtract(1, 'month'));
+        const month = dayjs(currentMonth);
+        const selectNextMonth = () => onMonthChange(month.add(1, 'month'));
+        const selectPreviousMonth = () => onMonthChange(month.subtract(1, 'month'));
         const toggleYearView = () => {
           if (onViewChange) {
             const nextView: DateView = view === 'day' ? 'year' : 'day';
@@ -58,7 +60,7 @@ const DateCalendar: Components<Omit<Theme, 'components'>>['MuiDateCalendar'] = {
               onClick={toggleYearView}
               sx={{ fontWeight: 600 }}
             >
-              {currentMonth.format('MMMM YYYY')}
+              {month.format('MMMM YYYY')}
             </Button>
 
             <Button shape="square" color="neutral" onClick={selectNextMonth}>
