@@ -126,7 +126,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: paths.defaultJwtLogin,
-    signOut: paths.defaultLoggedOut,
+    signIn: paths.login,
+    signOut: paths.loggedOut,
   },
 };

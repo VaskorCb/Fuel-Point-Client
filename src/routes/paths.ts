@@ -1,10 +1,6 @@
 export const rootPaths = {
   root: '',
   pagesRoot: 'pages',
-  authRoot: 'authentication',
-  authDefaultJwtRoot: 'default/jwt',
-  authDefaultFirebaseRoot: 'default/firebase',
-  authDefaultAuth0Root: 'default/auth0',
   errorRoot: 'error',
 };
 
@@ -12,57 +8,160 @@ const rootPrefix = rootPaths.root ? `/${rootPaths.root}` : '';
 
 const paths = {
   dashboard: `${rootPrefix}/dashboard`,
-  workflow: `${rootPrefix}/workflow`,
-  scheduling: `${rootPrefix}/scheduling`,
-  customer_list: `${rootPrefix}/customer-list`,
-  vehicle_list: `${rootPrefix}/vehicle-list`,
-  phone_book: `${rootPrefix}/phone-book`,
-  time_clock: `${rootPrefix}/time-clock`,
-  write_a_check: `${rootPrefix}/write-a-check`,
+  sales: `${rootPrefix}/sales`,
+  sales_new: `${rootPrefix}/sales/new`,
+  shifts: `${rootPrefix}/shifts`,
+  shifts_start: `${rootPrefix}/shifts/start`,
+  tanks: `${rootPrefix}/tanks`,
+  pumps: `${rootPrefix}/pumps`,
+  employees: `${rootPrefix}/employees`,
+  employees_new: `${rootPrefix}/employees/new`,
+  customers: `${rootPrefix}/customers`,
+  credits: `${rootPrefix}/credits`,
+  credits_payment: `${rootPrefix}/credits/payment`,
+  supplies: `${rootPrefix}/supplies`,
+  supplies_new: `${rootPrefix}/supplies/new`,
+  expenses: `${rootPrefix}/expenses`,
+  bank_deposits: `${rootPrefix}/bank-deposits`,
   reports: `${rootPrefix}/reports`,
-  general_settings: `${rootPrefix}/general-settings`,
-  defaultJwtLogin: `/${rootPaths.authRoot}/${rootPaths.authDefaultJwtRoot}/login`,
-  defaultJwtSignup: `/${rootPaths.authRoot}/${rootPaths.authDefaultJwtRoot}/sign-up`,
-  defaultJwtForgotPassword: `/${rootPaths.authRoot}/${rootPaths.authDefaultJwtRoot}/forgot-password`,
-  defaultJwt2FA: `/${rootPaths.authRoot}/${rootPaths.authDefaultJwtRoot}/2fa`,
-  defaultJwtSetPassword: `/${rootPaths.authRoot}/${rootPaths.authDefaultJwtRoot}/set-password`,
+  settings: `${rootPrefix}/settings`,
+  fuel_prices: `${rootPrefix}/settings/fuel-prices`,
+  team: `${rootPrefix}/team`,
+  manage_subscription: `${rootPrefix}/manage-subscription`,
 
-  defaultAuth0Login: `/${rootPaths.authRoot}/${rootPaths.authDefaultAuth0Root}/login`,
+  // Auth
+  login: '/sign-in',
+  signup: '/sign-up',
+  forgotPassword: '/forgot-password',
+  twoFactorAuth: '/2fa',
+  setPassword: '/set-password',
+  loggedOut: '/logged-out',
 
-  defaultFirebaseLogin: `/${rootPaths.authRoot}/${rootPaths.authDefaultFirebaseRoot}/login`,
-  defaultFirebaseSignup: `/${rootPaths.authRoot}/${rootPaths.authDefaultFirebaseRoot}/sign-up`,
-  defaultFirebaseForgotPassword: `/${rootPaths.authRoot}/${rootPaths.authDefaultFirebaseRoot}/forgot-password`,
+  // Onboarding
+  onboarding: '/onboarding',
+
+  // Subscription
+  subscription: '/subscription',
+
+  // Platform Admin
+  platformAdmin: '/platform-admin',
+  platformAdminSubscriptions: '/platform-admin/subscriptions',
+
   notifications: `/${rootPaths.pagesRoot}/notifications`,
-
-  defaultLoggedOut: `/${rootPaths.authRoot}/default/logged-out`,
-
   404: `/${rootPaths.errorRoot}/404`,
 };
 
 export const authPaths = {
-  /* ---------------------------------JWT----------------------------------------- */
-  login: paths.defaultJwtLogin,
-  signup: paths.defaultJwtSignup,
-  forgotPassword: paths.defaultJwtForgotPassword,
-  setNewPassword: paths.defaultJwtSetPassword,
-  twoFactorAuth: paths.defaultJwt2FA,
-  /* ---------------------------------Firebase----------------------------------------- */
-  // login: paths.defaultFirebaseLogin,
-  // signup: paths.defaultFirebaseSignup,
-  // forgotPassword: paths.defaultFirebaseForgotPassword,
-  /* ---------------------------------Auth0----------------------------------------- */
-  // login: paths.defaultAuth0Login,
+  login: paths.login,
+  signup: paths.signup,
+  forgotPassword: paths.forgotPassword,
+  setNewPassword: paths.setPassword,
+  twoFactorAuth: paths.twoFactorAuth,
 };
 
 export const apiEndpoints = {
+  // Auth
   register: '/auth/register',
   login: '/auth/login',
   logout: '/auth/logout',
-  profile: '/auth/profile',
+  profile: '/users/profile',
+  refresh: '/auth/refresh',
   getUsers: '/users',
   forgotPassword: '/auth/forgot-password',
   setPassword: '/auth/set-password',
-  getProduct: (id: string) => `e-commerce/products/${id}`,
+
+  // Users / Team
+  inviteUser: '/users/invite',
+  team: '/users/team',
+  onboardingComplete: '/users/onboarding-complete',
+  owners: '/users/owners',
+  platformStats: '/users/platform-stats',
+
+  // Fuel Types
+  fuelTypes: '/fuel-types',
+  fuelTypeById: (id: number) => `/fuel-types/${id}`,
+  fuelTypePrice: (id: number) => `/fuel-types/${id}/price`,
+  fuelTypePriceHistory: (id: number) => `/fuel-types/${id}/price-history`,
+
+  // Tanks
+  tanks: '/tanks',
+  tankById: (id: number) => `/tanks/${id}`,
+  tankAlerts: '/tanks/alerts',
+  tankDipping: (id: number) => `/tanks/${id}/dipping`,
+  tankDippings: (id: number) => `/tanks/${id}/dippings`,
+
+  // Pumps & Nozzles
+  pumps: '/pumps',
+  pumpById: (id: number) => `/pumps/${id}`,
+  pumpNozzles: (pumpId: number) => `/pumps/${pumpId}/nozzles`,
+  nozzles: '/nozzles',
+  nozzleById: (id: number) => `/nozzles/${id}`,
+
+  // Employees
+  employees: '/employees',
+  employeeById: (id: number) => `/employees/${id}`,
+
+  // Shifts
+  shiftStart: '/shifts/start',
+  shiftEnd: (id: number) => `/shifts/${id}/end`,
+  shifts: '/shifts',
+  shiftById: (id: number) => `/shifts/${id}`,
+  shiftsActive: '/shifts/active',
+
+  // Sales
+  sales: '/sales',
+  saleById: (id: number) => `/sales/${id}`,
+  salesDailySummary: '/sales/daily-summary',
+
+  // Vehicles
+  vehicles: '/vehicles',
+  vehicleSearch: '/vehicles/search',
+  vehicleById: (id: number) => `/vehicles/${id}`,
+
+  // Customers
+  customers: '/customers',
+  customerById: (id: number) => `/customers/${id}`,
+
+  // Credits
+  creditPayment: '/credits/payment',
+  credits: '/credits',
+  creditsOutstanding: '/credits/outstanding',
+  creditsSummary: '/credits/summary',
+
+  // Supplies
+  supplies: '/supplies',
+  supplyById: (id: number) => `/supplies/${id}`,
+
+  // Expenses
+  expenses: '/expenses',
+  expenseById: (id: number) => `/expenses/${id}`,
+  expensesSummary: '/expenses/summary',
+
+  // Bank Deposits
+  bankDeposits: '/bank-deposits',
+  bankDepositById: (id: number) => `/bank-deposits/${id}`,
+
+  // Dashboard
+  dashboardSummary: '/dashboard/summary',
+  dashboardSalesChart: '/dashboard/sales-chart',
+  dashboardTankLevels: '/dashboard/tank-levels',
+  dashboardCreditOverview: '/dashboard/credit-overview',
+
+  // Subscriptions
+  subscriptionTrial: '/subscriptions/trial',
+  subscriptionSubscribe: '/subscriptions/subscribe',
+  subscriptionCurrent: '/subscriptions/current',
+  subscriptions: '/subscriptions',
+  subscriptionActivate: (id: number) => `/subscriptions/${id}/activate`,
+  subscriptionExpireOverdue: '/subscriptions/expire-overdue',
+
+  // Reports
+  reportDaily: '/reports/daily',
+  reportMonthly: '/reports/monthly',
+  reportFuelWise: '/reports/fuel-wise',
+  reportShiftWise: '/reports/shift-wise',
+  reportProfitLoss: '/reports/profit-loss',
+  reportStock: '/reports/stock',
 };
 
 export default paths;

@@ -35,19 +35,17 @@ const Footer = () => {
           <Box component="span" whiteSpace="nowrap">
             ©
             <Link
-              href="https://www.vip-shop-management.com/"
-              target="_blank"
+              href="/"
               sx={{ textDecoration: 'none', mx: 0.5 }}
             >
-              Vip Shop Management
+              Fuel Point
             </Link>
             {dayjs().year()}
           </Box>
           ,&nbsp;
           <Box component="span" whiteSpace="nowrap">
-          All rights reserved
+            All rights reserved
           </Box>
-
         </Typography>
       </Stack>
     </>

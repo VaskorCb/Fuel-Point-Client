@@ -1,118 +1,104 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import MuiAppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import { paperClasses } from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import MuiAppBar from '@mui/material/AppBar';
-import { useBreakpoints } from 'providers/BreakpointsProvider';
+import Typography from '@mui/material/Typography';
 import { useSettingsContext } from 'providers/SettingsProvider';
-import { topnavVibrantStyle } from 'theme/styles/vibrantNav';
 import IconifyIcon from 'components/base/IconifyIcon';
-import VibrantBackground from 'components/common/VibrantBackground';
 import AppbarActionItems from '../common/AppbarActionItems';
-import SearchBox from '../common/search-box/SearchBox';
-import Image from 'next/image';
-import logo from '../../../../public/assets/logos/logo.svg';
+import petrolPumpIcon from '../../../../public/assets/logos/petrol-pump-icon.svg';
+import paths from 'routes/paths';
 
 const TopNavStacked = () => {
-  const {
-    config: { navColor },
-    handleDrawerToggle,
-  } = useSettingsContext();
-
-  const { up } = useBreakpoints();
-  const upSm = up('sm');
-  const upMd = up('md');
+  const router = useRouter();
+  const { handleDrawerToggle } = useSettingsContext();
 
   return (
-    <>
-      <MuiAppBar
-        position="fixed"
-        sx={[
-          {
-            width: 1,
-            zIndex: ({ zIndex }) => ({
-              md: zIndex.drawer + 1,
-            }),
-            [`&.${paperClasses.root}`]: {
-              outline: 'none',
-            },
-          },
-          navColor === 'vibrant' && topnavVibrantStyle,
-        ]}
+    <MuiAppBar
+      position="fixed"
+      elevation={0}
+      sx={{
+        width: 1,
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        bgcolor: 'background.paper',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+      }}
+    >
+      <Toolbar
+        sx={{
+          minHeight: 64,
+          height: 64,
+          px: { xs: 2, sm: 3 },
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 2,
+        }}
       >
-        {navColor === 'vibrant' && <VibrantBackground position="top" />}
-        <Toolbar variant="appbarStacked" sx={(theme ) => ({ height: 82, bgcolor: theme.palette.primary.dark, px: { xs: 3, md: 5 } })}>
+        {/* Left: Menu + Logo */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerToggle}
+            sx={{
+              display: { md: 'none' },
+              color: 'text.primary',
+              '&:hover': { bgcolor: 'action.hover' },
+            }}
+          >
+            <IconifyIcon icon="material-symbols:menu-rounded" sx={{ fontSize: 26 }} />
+          </IconButton>
+
           <Box
+            component="button"
+            onClick={() => router.push(paths.dashboard)}
             sx={{
               display: 'flex',
               alignItems: 'center',
-              minWidth: 260,
+              gap: 1.5,
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              p: 0.5,
+              borderRadius: 1,
+              '&:hover': { bgcolor: 'action.hover' },
             }}
           >
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
+            <Image
+              src={petrolPumpIcon}
+              alt="Fuel Point"
+              width={32}
+              height={32}
+              style={{ flexShrink: 0 }}
+            />
+            <Typography
+              variant="h6"
               sx={{
-                display: { xs: 'flex', md: 'none' },
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'text.primary',
+                display: { xs: 'none', sm: 'block' },
               }}
             >
-              <IconifyIcon icon="material-symbols:menu-rounded" sx={{ fontSize: 20 }} />
-            </IconButton>
-            {/* <Logo showName={upSm} /> */}
-            <Image src={logo} alt="logo" width={74} height={28} />
+              Fuel Point
+            </Typography>
           </Box>
+        </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-            {upMd && (
-              <SearchBox
-                sx={[
-                  {
-                    width: 1,
-                    maxWidth: 364,
-                    ml: 0,
-                  },
-                ]}
-                slotProps={{
-                  input: {
-                    sx: {
-                      backgroundColor: 'transparent',
-                      '&.MuiInputBase-root': {
-                        backgroundColor: 'transparent',
-                      },
-                      '&.Mui-focused': {
-                        backgroundColor: 'transparent',
-                      },
-                      '& .MuiInputBase-input::-webkit-input-placeholder': {
-                        color: 'var(--aurora-palette-neutral-contrastText) !important',
-                        opacity: '1 !important',
-                      },
-                      '& .MuiInputBase-input::-moz-placeholder': {
-                        color: 'var(--aurora-palette-neutral-contrastText) !important',
-                        opacity: '1 !important',
-                      },
-                      '& .MuiInputAdornment-root .iconify': {
-                        color: 'neutral.contrastText',
-                      },
-                    },
-                  },
-                }}
-              />
-            )}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <Button variant="soft" color='neutral'  sx={(theme) => ({ color: theme.palette.primary.dark, borderRadius: 1})} size="large" startIcon={<IconifyIcon icon="material-symbols:add-2-rounded" sx={{ fontSize: 24 }} />}>
-                Create new estimate
-              </Button>
-              <AppbarActionItems sx={{ ml: 0 }} />
-            </Box>
-          </Box>
-        </Toolbar>
-        <Divider />
-      </MuiAppBar>
-    </>
+        {/* Right: Actions */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <AppbarActionItems sx={{ ml: 0 }} />
+        </Box>
+      </Toolbar>
+    </MuiAppBar>
   );
 };
 

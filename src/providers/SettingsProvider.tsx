@@ -7,13 +7,13 @@ import {
   useContext,
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Config, initialConfig } from 'config';
 import { getColor } from 'helpers/echart-utils';
 import { getItemFromStore } from 'lib/utils';
-import 'locales/i18n';
+import { changeLanguage } from 'locales/i18n';
 import {
   ACTIONTYPE,
   COLLAPSE_NAVBAR,
@@ -63,7 +63,6 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     primaryColor,
   };
   const [config, configDispatch] = useReducer(settingsReducer, configState);
-  const { i18n } = useTranslation();
 
   const setConfig = useCallback(
     (payload: Partial<Config>) => {
@@ -75,44 +74,48 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     [configDispatch],
   );
 
-  const handleDrawerToggle = () => {
+  const handleDrawerToggle = useCallback(() => {
     setConfig({
       openNavbarDrawer: !config.openNavbarDrawer,
     });
-  };
+  }, [config.openNavbarDrawer, setConfig]);
 
-  const toggleNavbarCollapse = () => {
+  const toggleNavbarCollapse = useCallback(() => {
     if (config.sidenavCollapsed) {
-      configDispatch({
-        type: EXPAND_NAVBAR,
-      });
+      configDispatch({ type: EXPAND_NAVBAR });
     } else {
-      configDispatch({
-        type: COLLAPSE_NAVBAR,
-      });
+      configDispatch({ type: COLLAPSE_NAVBAR });
     }
-  };
+  }, [config.sidenavCollapsed, configDispatch]);
 
-  const getThemeColor = (color: string) => {
-    return getColor(color);
-  };
+  const getThemeColor = useCallback((color: string) => getColor(color), []);
 
   useEffect(() => {
-    if (i18n && i18n.changeLanguage) {
-      i18n.changeLanguage(config.locale.split('-').join(''));
-    }
-  }, [config.locale, i18n]);
+    changeLanguage(config.locale.split('-').join(''));
+  }, [config.locale]);
+
+  const contextValue = useMemo(
+    () => ({
+      config,
+      configDispatch,
+      setConfig,
+      handleDrawerToggle,
+      toggleNavbarCollapse,
+      getThemeColor,
+    }),
+    [
+      config,
+      configDispatch,
+      setConfig,
+      handleDrawerToggle,
+      toggleNavbarCollapse,
+      getThemeColor,
+    ]
+  );
 
   return (
     <SettingsContext
-      value={{
-        config,
-        configDispatch,
-        setConfig,
-        handleDrawerToggle,
-        toggleNavbarCollapse,
-        getThemeColor,
-      }}
+      value={contextValue}
     >
       {children}
     </SettingsContext>

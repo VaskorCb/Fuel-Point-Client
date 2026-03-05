@@ -1,59 +1,61 @@
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import App from 'app/App';
-import { authOptions } from 'lib/next-auth/nextAuthOptions';
 import 'locales/i18n';
 import type { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
+import AuthProvider from 'providers/AuthProvider';
 import BreakpointsProvider from 'providers/BreakpointsProvider';
+import JotaiAppProvider from 'providers/JotaiProvider';
 import LocalizationProvider from 'providers/LocalizationProvider';
-import NotistackProvider from 'providers/NotistackProvider';
-import { SessionProvider } from 'providers/SessionProvider';
+import ToastProvider from 'providers/ToastProvider';
+import QueryProvider from 'providers/QueryProvider';
 import SettingsProvider from 'providers/SettingsProvider';
 import ThemeProvider from 'providers/ThemeProvider';
 import { type ReactNode } from 'react';
 import { plusJakartaSans, splineSansMono } from 'theme/typography';
 
 export const metadata: Metadata = {
-  title: 'VIP Shop Management',
-  description: 'Admin Dashboard and Web App Template',
+  title: 'Fuel Point',
+  description: 'Fuel station management — sales, shifts, tanks, and reports in one place.',
   icons: [
     {
       rel: 'icon',
-      url: '/favicon.ico',
+      type: 'image/svg+xml',
+      url: '/assets/logos/petrol-pump-icon.svg',
     },
   ],
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html
       suppressHydrationWarning
       lang="en"
       className={`${plusJakartaSans.className} ${splineSansMono.className}`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <InitColorSchemeScript attribute="data-aurora-color-scheme" modeStorageKey="aurora-mode" />
         <AppRouterCacheProvider>
-          <SessionProvider session={session}>
-            <SettingsProvider>
-              <LocalizationProvider>
-                <ThemeProvider>
-                  <NotistackProvider>
+          <JotaiAppProvider>
+            <QueryProvider>
+              <SettingsProvider>
+                <LocalizationProvider>
+                  <ThemeProvider>
+                    <ToastProvider />
                     <BreakpointsProvider>
-                      <App>{children}</App>
+                      <AuthProvider>
+                        <App>{children}</App>
+                      </AuthProvider>
                     </BreakpointsProvider>
-                  </NotistackProvider>
-                </ThemeProvider>
-              </LocalizationProvider>
-            </SettingsProvider>
-          </SessionProvider>
+                  </ThemeProvider>
+                </LocalizationProvider>
+              </SettingsProvider>
+            </QueryProvider>
+          </JotaiAppProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

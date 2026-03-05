@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import clsx from 'clsx';
+import { useAtomValue } from 'jotai';
 import sitemap, { MenuItem } from 'routes/sitemap';
+import { userRoleAtom } from 'store/auth';
 import IconifyIcon from 'components/base/IconifyIcon';
 import { useNavContext } from '../NavProvider';
 import NavitemPopover from './NavItemPopover';
@@ -20,6 +22,22 @@ const TopnavItems = ({ type = 'default' }: TopnavItemsProps) => {
   const pathname = usePathname();
   const { isNestedItemOpen } = useNavContext();
 
+  const userRole = useAtomValue(userRoleAtom);
+
+  const filteredSitemap = useMemo(
+    () =>
+      sitemap
+        .filter((group) => !group.roles || !userRole || group.roles.includes(userRole))
+        .map((group) => ({
+          ...group,
+          items: group.items.filter(
+            (item) => !item.roles || !userRole || item.roles.includes(userRole),
+          ),
+        }))
+        .filter((group) => group.items.length > 0),
+    [userRole],
+  );
+
   useEffect(() => {
     setAnchorEl(null);
     setSelectedMenu(null);
@@ -33,7 +51,7 @@ const TopnavItems = ({ type = 'default' }: TopnavItemsProps) => {
       }}
       className="nav-items"
     >
-      {sitemap.map((menu) => (
+      {filteredSitemap.map((menu) => (
         <Button
           key={menu.id}
           variant="text"

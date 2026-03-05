@@ -26,15 +26,19 @@ i18n
     debug: false,
   });
 
-// Lazy-load non-English translations on language change
-i18n.on('languageChanged', async (lng) => {
-  if (lng === 'enUS' || i18n.hasResourceBundle(lng, 'translation')) return;
-
-  const loader = localeImports[lng];
-  if (loader) {
-    const module = await loader();
-    i18n.addResourceBundle(lng, 'translation', module.default, true, true);
+/**
+ * Load translations for a language BEFORE switching to it.
+ * This ensures all components see the new translations immediately.
+ */
+export const changeLanguage = async (lng: string): Promise<void> => {
+  if (lng !== 'enUS' && !i18n.hasResourceBundle(lng, 'translation')) {
+    const loader = localeImports[lng];
+    if (loader) {
+      const module = await loader();
+      i18n.addResourceBundle(lng, 'translation', module.default, true, true);
+    }
   }
-});
+  await i18n.changeLanguage(lng);
+};
 
 export default i18n;

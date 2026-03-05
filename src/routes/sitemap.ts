@@ -1,5 +1,6 @@
 import { SxProps } from '@mui/material';
 import paths from './paths';
+import { UserRole } from 'types/auth-and-onboarding';
 
 export interface SubMenuItem {
   name: string;
@@ -13,6 +14,7 @@ export interface SubMenuItem {
   items?: SubMenuItem[];
   new?: boolean;
   hasNew?: boolean;
+  roles?: UserRole[];
 }
 
 export interface MenuItem {
@@ -22,293 +24,204 @@ export interface MenuItem {
   icon: string;
   iconSx?: SxProps;
   items: SubMenuItem[];
+  roles?: UserRole[];
 }
 
 const sitemap: MenuItem[] = [
   {
-    id: 'none',
-    key: 'none',
+    id: 'main',
+    key: 'main',
     icon: 'material-symbols:view-quilt-outline',
+    roles: ['OWNER', 'ADMIN'],
     items: [
       {
         name: 'Dashboard',
-        key: 'Dashboard',
+        key: 'dashboard',
         path: paths.dashboard,
         pathName: 'dashboard',
-        icon: 'material-symbols:home-outline',
+        icon: 'material-symbols:dashboard-outline',
         active: true,
-      },
-      {
-        name: 'Workflow',
-        key: 'Workflow',
-        path: paths.workflow,
-        pathName: 'workflow',
-        icon: 'material-symbols:pending-actions',
-        active: true,
-      },
-      {
-        name: 'Scheduling',
-        key: 'Scheduling',
-        path: paths.scheduling,
-        pathName: 'scheduling',
-        icon: 'material-symbols:calendar-month-outline',
-        active: true,
-      },
-    ],
-  },
-  // {
-  //   id: 'pages',
-  //   subheader: 'Pages',
-  //   key: 'pages',
-  //   icon: 'material-symbols:view-quilt-outline',
-  //   items: [
-  //     {
-  //       name: 'Starter',
-  //       key: 'starter',
-  //       path: paths.starter,
-  //       pathName: 'starter',
-  //       icon: 'material-symbols:play-circle-outline-rounded',
-  //       active: true,
-  //     },
-  //     {
-  //       name: 'Error 404',
-  //       key: 'error_404',
-  //       pathName: 'error',
-  //       active: true,
-  //       icon: 'material-symbols:warning-outline-rounded',
-  //       path: paths[404],
-  //     },
-  //   ],
-  // },
-  {
-    id: 'customer&vehicles',
-    subheader: 'Customer & Vehicle',
-    key: 'Customer & Vehicle',
-    icon: 'material-symbols:view-quilt-outline',
-    items: [
-      {
-        name: 'Customer List',
-        key: 'Customer List',
-        path: paths.customer_list,
-        pathName: 'customer_list',
-        icon: 'material-symbols:group-outline',
-        active: true,
-      },
-      {
-        name: 'Vehicle List',
-        key: 'Vehicle List',
-        path: paths.vehicle_list,
-        pathName: 'vehicle_list',
-        icon: 'material-symbols:directions-car',
-        active: true,
-      },
-      {
-        name: 'Phone Book ',
-        key: 'Phone Book ',
-        path: paths.phone_book,
-        pathName: 'phone_book',
-        icon: 'material-symbols:sticky-note-2-outline',
-        active: true,
+        roles: ['OWNER', 'ADMIN'],
       },
     ],
   },
   {
-    id: 'employeeTools',
-    subheader: 'Employee Tools',
-    key: 'Employee Tools',
-    icon: 'material-symbols:settings-outline',
+    id: 'sales',
+    subheader: 'Sales & Operations',
+    key: 'sales_operations',
+    icon: 'material-symbols:point-of-sale',
+    roles: ['OWNER', 'ADMIN'],
     items: [
       {
-        name: 'Time Clock',
-        key: 'Time Clock',
-        path: paths.time_clock,
-        pathName: 'time_clock',
+        name: 'Sales',
+        key: 'sales',
+        path: paths.sales,
+        pathName: 'sales',
+        icon: 'material-symbols:point-of-sale',
+        active: true,
+        selectionPrefix: '/sales',
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Shifts',
+        key: 'shifts',
+        path: paths.shifts,
+        pathName: 'shifts',
         icon: 'material-symbols:schedule-outline',
         active: true,
+        selectionPrefix: '/shifts',
+        roles: ['OWNER', 'ADMIN'],
       },
     ],
   },
   {
-    id: 'accounting&admin',
-    subheader: 'Accounting & Admin',
-    key: 'Accounting & Admin',
-    icon: 'material-symbols:settings-outline',
+    id: 'inventory',
+    subheader: 'Inventory',
+    key: 'inventory',
+    icon: 'material-symbols:inventory-2-outline',
+    roles: ['OWNER', 'ADMIN'],
     items: [
       {
-        name: 'Write a Check',
-        key: 'Write a Check',
-        path: paths.write_a_check,
-        pathName: 'write_a_check',
-        icon: 'material-symbols:edit-square-outline-rounded',
+        name: 'Tanks',
+        key: 'tanks',
+        path: paths.tanks,
+        pathName: 'tanks',
+        icon: 'material-symbols:propane-tank-outline',
         active: true,
+        selectionPrefix: '/tanks',
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Pumps & Nozzles',
+        key: 'pumps',
+        path: paths.pumps,
+        pathName: 'pumps',
+        icon: 'material-symbols:local-gas-station-outline',
+        active: true,
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Supplies (BPC)',
+        key: 'supplies',
+        path: paths.supplies,
+        pathName: 'supplies',
+        icon: 'material-symbols:local-shipping-outline',
+        active: true,
+        selectionPrefix: '/supplies',
+        roles: ['OWNER', 'ADMIN'],
+      },
+    ],
+  },
+  {
+    id: 'people',
+    subheader: 'People',
+    key: 'people',
+    icon: 'material-symbols:group-outline',
+    roles: ['OWNER', 'ADMIN'],
+    items: [
+      {
+        name: 'Employees',
+        key: 'employees',
+        path: paths.employees,
+        pathName: 'employees',
+        icon: 'material-symbols:badge-outline',
+        active: true,
+        selectionPrefix: '/employees',
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Customers',
+        key: 'customers',
+        path: paths.customers,
+        pathName: 'customers',
+        icon: 'material-symbols:group-outline',
+        active: true,
+        selectionPrefix: '/customers',
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Credit / Baki',
+        key: 'credits',
+        path: paths.credits,
+        pathName: 'credits',
+        icon: 'material-symbols:account-balance-wallet-outline',
+        active: true,
+        selectionPrefix: '/credits',
+        roles: ['OWNER', 'ADMIN'],
+      },
+    ],
+  },
+  {
+    id: 'finance',
+    subheader: 'Finance',
+    key: 'finance',
+    icon: 'material-symbols:account-balance-outline',
+    roles: ['OWNER', 'ADMIN'],
+    items: [
+      {
+        name: 'Expenses',
+        key: 'expenses',
+        path: paths.expenses,
+        pathName: 'expenses',
+        icon: 'material-symbols:receipt-long-outline',
+        active: true,
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Bank Deposits',
+        key: 'bank_deposits',
+        path: paths.bank_deposits,
+        pathName: 'bank-deposits',
+        icon: 'material-symbols:account-balance-outline',
+        active: true,
+        roles: ['OWNER', 'ADMIN'],
       },
       {
         name: 'Reports',
-        key: 'Reports',
+        key: 'reports',
         path: paths.reports,
         pathName: 'reports',
-        icon: 'material-symbols:docs-outline',
+        icon: 'material-symbols:analytics-outline',
         active: true,
+        roles: ['OWNER', 'ADMIN'],
       },
     ],
   },
-
-  // {
-  //   id: 'authentication',
-  //   subheader: 'Authentication',
-  //   key: 'authentication',
-  //   icon: 'material-symbols:security-rounded',
-  //   items: [
-  //     {
-  //       name: 'Login',
-  //       key: 'login',
-  //       icon: 'material-symbols:login',
-  //       path: paths.defaultJwtLogin,
-  //       pathName: 'login',
-  //       active: true,
-  //     },
-  //     {
-  //       name: 'Sign up',
-  //       key: 'sign_up',
-  //       icon: 'material-symbols:person-add-outline',
-  //       path: paths.defaultJwtSignup,
-  //       pathName: 'sign-up',
-  //       active: true,
-  //     },
-  //     {
-  //       name: 'Forgot password',
-  //       key: 'forgot_password',
-  //       icon: 'material-symbols:key-outline',
-  //       path: paths.defaultJwtForgotPassword,
-  //       pathName: 'forgot-password',
-  //       active: true,
-  //     },
-  //     {
-  //       name: '2FA',
-  //       key: '2FA',
-  //       icon: 'material-symbols:enhanced-encryption-outline',
-  //       path: paths.defaultJwt2FA,
-  //       pathName: '2FA',
-  //       active: true,
-  //     },
-  //     {
-  //       name: 'Set password',
-  //       key: 'set_password',
-  //       icon: 'material-symbols:settings-outline',
-  //       path: paths.defaultJwtSetPassword,
-  //       pathName: 'default-set-password',
-  //       active: true,
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 'misc',
-  //   subheader: 'Misc',
-  //   key: 'misc',
-  //   icon: 'material-symbols:dashboard-customize-outline-rounded',
-  //   items: [
-  //     {
-  //       name: 'Multi level',
-  //       key: 'multi_level',
-  //       pathName: 'multi-level',
-  //       icon: 'material-symbols:layers-outline-rounded',
-  //       active: true,
-  //       items: [
-  //         {
-  //           name: 'Level two (1)',
-  //           key: 'level_two_1',
-  //           path: '#!',
-  //           pathName: 'multi-level-2',
-  //           active: true,
-  //         },
-  //         {
-  //           name: 'Level two (2)',
-  //           key: 'level_two_2',
-  //           pathName: 'multi-level-3',
-  //           active: true,
-  //           items: [
-  //             {
-  //               name: 'Level three (1)',
-  //               key: 'level_three_1',
-  //               path: '#!',
-  //               pathName: 'multi-level-item-3',
-  //               active: true,
-  //             },
-  //             {
-  //               name: 'Level three (2)',
-  //               key: 'level_three_2',
-  //               path: '#!',
-  //               pathName: 'multi-level-item-4',
-  //               active: true,
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           name: 'Level two (3)',
-  //           key: 'level_two_3',
-  //           pathName: 'multi-level-4',
-  //           active: true,
-  //           items: [
-  //             {
-  //               name: 'Level three (3)',
-  //               key: 'level_three_3',
-  //               path: '#!',
-  //               pathName: 'multi-level-item-6',
-  //               active: true,
-  //             },
-  //             {
-  //               name: 'Level three (4)',
-  //               key: 'level_three_4',
-  //               pathName: 'multi-level-item-7',
-  //               active: true,
-  //               items: [
-  //                 {
-  //                   name: 'Level four (1)',
-  //                   key: 'level_four_1',
-  //                   path: '#!',
-  //                   pathName: 'multi-level-item-8',
-  //                   active: true,
-  //                 },
-  //                 {
-  //                   name: 'Level four (2)',
-  //                   key: 'level_four_2',
-  //                   pathName: 'multi-level-item-9',
-  //                   active: true,
-  //                   items: [
-  //                     {
-  //                       name: 'Level five (1)',
-  //                       key: 'level_five_1',
-  //                       path: '#!',
-  //                       pathName: 'multi-level-item-10',
-  //                       active: true,
-  //                     },
-  //                     {
-  //                       name: 'Level five (2)',
-  //                       key: 'level_five_2',
-  //                       path: '#!',
-  //                       pathName: 'multi-level-item-11',
-  //                       active: true,
-  //                     },
-  //                   ],
-  //                 },
-  //               ],
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    id: 'admin',
+    subheader: 'Admin',
+    key: 'admin',
+    icon: 'material-symbols:admin-panel-settings-outline',
+    roles: ['OWNER', 'ADMIN'],
+    items: [
+      {
+        name: 'Team',
+        key: 'team',
+        path: paths.team,
+        pathName: 'team',
+        icon: 'material-symbols:group-add-outline',
+        active: true,
+        roles: ['OWNER', 'ADMIN'],
+      },
+      {
+        name: 'Fuel Prices',
+        key: 'fuel_prices',
+        path: paths.fuel_prices,
+        pathName: 'fuel-prices',
+        icon: 'material-symbols:oil-barrel-outline',
+        active: true,
+        roles: ['OWNER', 'ADMIN'],
+      },
+    ],
+  },
 ];
 
-export const generalSettingsSitemap: SubMenuItem =
-{
-  name: 'General Settings',
-  pathName: 'general_settings',
+export const settingsSitemap: SubMenuItem = {
+  name: 'Settings',
+  pathName: 'settings',
   icon: 'material-symbols:settings-outline',
   active: true,
-  path: paths.general_settings,
-}
-
+  path: paths.settings,
+};
 
 export default sitemap;

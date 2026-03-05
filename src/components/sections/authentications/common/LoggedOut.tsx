@@ -2,40 +2,50 @@
 
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { authPaths } from 'routes/paths';
+import AuthFormLayout from './AuthOnbardFormLayout';
 
 const LoggedOut = () => {
   return (
-    <Stack
-      direction="column"
-      sx={{
-        flex: 1,
-        height: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        p: { xs: 4, md: 10 },
-      }}
-    >
-      <Box sx={{ display: { xs: 'none', md: 'block' } }} />
-      <Box sx={{ maxWidth: 370 }}>
-        <Typography variant="h4">You have been logged out.</Typography>
-        <Typography variant="h2" sx={{ mb: 2 }}>
-          See you soon!
-        </Typography>
-        <Typography sx={{ mb: 6 }}>
-          We are sad to see you go away but hey, you can log back in anytime you want!
-        </Typography>
-        <Button variant="contained" href={authPaths.login} color="primary" fullWidth>
-          Log back in
-        </Button>
-      </Box>
-      <Link href="#!" variant="subtitle2">
-        Trouble signing in?
-      </Link>
-    </Stack>
+    <AuthFormLayout>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1, textAlign: 'center' }}>
+        You have been logged out
+      </Typography>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mb: 5, textAlign: 'center', lineHeight: 1.6 }}
+      >
+        We are sad to see you go, but you can log back in anytime!
+      </Typography>
+
+      <Button
+        variant="contained"
+        href={authPaths.login}
+        color="primary"
+        fullWidth
+        size="large"
+        sx={{
+          py: 1.75,
+          fontWeight: 700,
+          borderRadius: 2,
+          textTransform: 'none',
+        }}
+      >
+        Log back in
+      </Button>
+
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mt: 5, textAlign: 'center', lineHeight: 1.6 }}
+      >
+        <Link href="#!" fontWeight={600} sx={{ color: 'primary.main' }}>
+          Trouble signing in?
+        </Link>
+      </Typography>
+    </AuthFormLayout>
   );
 };
 

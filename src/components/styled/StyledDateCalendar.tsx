@@ -6,14 +6,15 @@ import {
   dayCalendarClasses,
   pickersSlideTransitionClasses,
 } from '@mui/x-date-pickers/DateCalendar';
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 type StyledDateCalendarProps = React.ComponentPropsWithRef<typeof DateCalendar>;
 
 const StyledDateCalendar = styled(({ ref, ...props }: StyledDateCalendarProps) => (
   <DateCalendar
     ref={ref}
-    dayOfWeekFormatter={(date: Dayjs) => {
+    dayOfWeekFormatter={(date) => {
+      const d = dayjs(date);
       const dayMap: { [key: string]: string } = {
         Su: 'Sun',
         Mo: 'Mon',
@@ -23,7 +24,7 @@ const StyledDateCalendar = styled(({ ref, ...props }: StyledDateCalendarProps) =
         Fr: 'Fri',
         Sa: 'Sat',
       };
-      return dayMap[date.format('dd')] || date.format('dd');
+      return dayMap[d.format('dd')] || d.format('dd');
     }}
     {...props}
   />

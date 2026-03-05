@@ -113,8 +113,8 @@ const SignupForm = ({
               <Link
                 href={
                   provider === "firebase"
-                    ? paths.defaultFirebaseLogin
-                    : paths.defaultJwtLogin
+                    ? paths.login
+                    : paths.login
                 }
                 sx={{ ml: 1 }}>
                 Log in

@@ -1,0 +1,52 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fuel Point - Clean iconic fuel pump -->
+  <!-- Main column -->
+  <rect x="14" y="5" width="12" height="22" rx="2" fill="url(#col)"/>
+  <!-- Top display -->
+  <rect x="16" y="8" width="8" height="4" rx="1" fill="url(#disp)"/>
+  <!-- Nozzle arm -->
+  <path d="M20 14h6l2 3v1.5H18V17l2-3z" fill="url(#noz)"/>
+  <!-- Hose curve -->
+  <path d="M26 15.5c2 0 3 1.5 3 4v8" stroke="url(#hose)" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Nozzle head -->
+  <circle cx="29" cy="27" r="3" fill="url(#head)"/>
+  <circle cx="29" cy="27" r="1.5" fill="url(#head-inner)"/>
+  <!-- Base -->
+  <rect x="12" y="27" width="16" height="6" rx="1.5" fill="url(#base)"/>
+  <!-- Fuel drop -->
+  <path d="M20 11.5c0-1 1.2-1.8 1.5-1.8.3 0 1.5.8 1.5 1.8 0 1-.8 1.8-1.5 1.8s-1.5-.8-1.5-1.8z" fill="url(#drop)"/>
+  <defs>
+    <linearGradient id="col" x1="14" y1="5" x2="26" y2="27" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D9488"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <linearGradient id="disp" x1="16" y1="8" x2="24" y2="12" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#99F6E4"/>
+      <stop offset="1" stop-color="#5EEAD4"/>
+    </linearGradient>
+    <linearGradient id="noz" x1="18" y1="14" x2="28" y2="18" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14B8A6"/>
+      <stop offset="1" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="hose" x1="26" y1="15" x2="29" y2="27" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2DD4BF"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <linearGradient id="head" x1="26" y1="24" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5EEAD4"/>
+      <stop offset="1" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="head-inner" x1="27.5" y1="25.5" x2="30.5" y2="28.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#99F6E4"/>
+      <stop offset="1" stop-color="#5EEAD4"/>
+    </linearGradient>
+    <linearGradient id="base" x1="12" y1="27" x2="28" y2="33" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#115E59"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="20" y1="9.5" x2="21.5" y2="13" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#CCFBF1"/>
+      <stop offset="1" stop-color="#5EEAD4"/>
+    </linearGradient>
+  </defs>
+</svg>

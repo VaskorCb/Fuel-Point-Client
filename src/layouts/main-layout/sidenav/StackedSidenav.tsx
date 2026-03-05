@@ -1,7 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
   Backdrop,
@@ -26,6 +26,7 @@ import { useBreakpoints } from 'providers/BreakpointsProvider';
 import { useSettingsContext } from 'providers/SettingsProvider';
 import sitemap, { MenuItem, SubMenuItem } from 'routes/sitemap';
 import { sidenavVibrantStyle } from 'theme/styles/vibrantNav';
+import { userAtom, userRoleAtom } from 'store/auth';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
 import Logo from 'components/common/Logo';
@@ -45,8 +46,22 @@ const StackedSidenav = () => {
   const { currentBreakpoint } = useBreakpoints();
   const { isDark } = useThemeMode();
 
-  const { data } = useSession();
-  const user = data?.user;
+  const user = useAtomValue(userAtom);
+  const userRole = useAtomValue(userRoleAtom);
+
+  const filteredSitemap = useMemo(
+    () =>
+      sitemap
+        .filter((group) => !group.roles || !userRole || group.roles.includes(userRole))
+        .map((group) => ({
+          ...group,
+          items: group.items.filter(
+            (item) => !item.roles || !userRole || item.roles.includes(userRole),
+          ),
+        }))
+        .filter((group) => group.items.length > 0),
+    [userRole],
+  );
 
   const isMenuActive = (item: MenuItem) => {
     if (pathname === '/' && item.id === 'pages') {
@@ -107,7 +122,7 @@ const StackedSidenav = () => {
                 py: 0,
               }}
             >
-              {sitemap.map((item) => (
+              {filteredSitemap.map((item) => (
                 <ListItem
                   key={item.id}
                   sx={{
@@ -212,7 +227,7 @@ const StackedSidenav = () => {
                 <StatusAvatar
                   status="online"
                   alt={user?.name}
-                  src={user?.image || undefined}
+                  src={undefined}
                   sx={{ width: 36, height: 36 }}
                 />
                 <Typography
@@ -275,8 +290,8 @@ const StackedSidenav = () => {
   }, [pathname, sidenavCollapsed]);
 
   useEffect(() => {
-    const activeMenu = sitemap.find(isMenuActive);
-    const defaultMenu = pathname === '/' ? sitemap[0] : null;
+    const activeMenu = filteredSitemap.find(isMenuActive);
+    const defaultMenu = pathname === '/' ? filteredSitemap[0] : null;
     setSelectedMenu(activeMenu || defaultMenu || null);
   }, [pathname]);
 

@@ -1,9 +1,9 @@
+import { useEffect, useMemo, useState } from 'react';
 import Link from '@mui/material/Link';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import { typographyClasses } from '@mui/material/Typography';
 import { useSettingsContext } from 'providers/SettingsProvider';
-import { useEffect, useMemo, useState } from 'react';
 import { rootPaths } from 'routes/paths';
 
 interface LogoProps extends SvgIconProps {
@@ -168,7 +168,7 @@ const Logo = ({ sx, viewBox = '0 0 26 40', showName = true, ...rest }: LogoProps
             },
           ]}
         >
-          VIP Shop Management
+          Fuel Point
         </Typography>
       )}
     </Link>

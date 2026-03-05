@@ -19,8 +19,8 @@ const Login = () => {
       <LoginForm
         provider="firebase"
         handleLogin={handleLogin}
-        signUpLink={paths.defaultFirebaseSignup}
-        forgotPasswordLink={paths.defaultFirebaseForgotPassword}
+        signUpLink={paths.signup}
+        forgotPasswordLink={paths.forgotPassword}
         defaultCredential={defaultJwtAuthCredentials}
       />
     </>

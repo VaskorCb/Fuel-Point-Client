@@ -2,25 +2,31 @@
 
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
+import Link from 'next/link';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
-import Button from '@mui/material/Button';
+import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import Toolbar from '@mui/material/Toolbar';
+import { useAtomValue } from 'jotai';
 import DocSearch from 'layouts/main-layout/sidenav/doc-search/DocSearch';
 import { useSettingsContext } from 'providers/SettingsProvider';
+import paths from 'routes/paths';
 import sitemap from 'routes/sitemap';
+import { settingsSitemap } from 'routes/sitemap';
+import { subscriptionAtom, userRoleAtom } from 'store/auth';
 import IconifyIcon from 'components/base/IconifyIcon';
-import Logo from 'components/common/Logo';
+import petrolPumpIcon from '../../../../public/assets/logos/petrol-pump-icon.svg';
 import { useNavContext } from '../NavProvider';
 import NavItem from './NavItem';
 import SidenavSimpleBar from './SidenavSimpleBar';
 import SlimNavItem from './SlimNavItem';
-import { generalSettingsSitemap } from 'routes/sitemap';
 
 interface SidenavDrawerContentProps {
   variant?: 'permanent' | 'temporary';
@@ -35,6 +41,22 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
   } = useSettingsContext();
 
   const { sidenavAppbarVariant } = useNavContext();
+
+  const userRole = useAtomValue(userRoleAtom);
+
+  const filteredSitemap = useMemo(
+    () =>
+      sitemap
+        .filter((group) => !group.roles || !userRole || group.roles.includes(userRole))
+        .map((group) => ({
+          ...group,
+          items: group.items.filter(
+            (item) => !item.roles || !userRole || item.roles.includes(userRole),
+          ),
+        }))
+        .filter((group) => group.items.length > 0),
+    [userRole],
+  );
 
   const expanded = useMemo(
     () => variant === 'temporary' || (variant === 'permanent' && !sidenavCollapsed),
@@ -72,7 +94,21 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
         >
           {(navigationMenuType === 'sidenav' || variant === 'temporary') && (
             <>
-              <Logo showName={expanded} />
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                }}
+              >
+                <Image src={petrolPumpIcon} alt="Fuel Point" width={32} height={32} />
+                {expanded && (
+                  <Typography variant="h6" fontWeight={700} letterSpacing="-0.02em">
+                    Fuel Point
+                  </Typography>
+                )}
+              </Box>
+
               <IconButton sx={{ mt: 1, display: { md: 'none' } }} onClick={toggleNavbarDrawer}>
                 <IconifyIcon icon="material-symbols:left-panel-close-outline" fontSize={20} />
               </IconButton>
@@ -107,7 +143,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
             ]}
           >
             {expanded
-              ? sitemap.map((menu, index) => (
+              ? filteredSitemap.map((menu, index) => (
                   <Box key={menu.id}>
                     {menu.subheader === 'Docs' && !sidenavCollapsed && (
                       <>
@@ -119,7 +155,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
                       dense
                       key={menu.id}
                       sx={{
-                        mb: index !== sitemap.length - 1 ? 3 : 0,
+                        mb: index !== filteredSitemap.length - 1 ? 3 : 0,
                         pb: 0,
                         display: 'flex',
                         flexDirection: 'column',
@@ -153,7 +189,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
                     </List>
                   </Box>
                 ))
-              : sitemap.map((menu, index) => (
+              : filteredSitemap.map((menu, index) => (
                   <Fragment key={menu.id}>
                     <List
                       component="nav"
@@ -168,15 +204,15 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
                         <SlimNavItem key={item.pathName} item={item} level={0} />
                       ))}
                     </List>
-                    {index !== sitemap.length - 1 && <Divider sx={[{ my: 1.5 }]} />}
+                    {index !== filteredSitemap.length - 1 && <Divider sx={[{ my: 1.5 }]} />}
                   </Fragment>
                 ))}
           </Box>
         </SidenavSimpleBar>
       </Box>
 
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           py: 2,
           px: expanded ? 4 : 2,
           display: 'flex',
@@ -184,13 +220,20 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
           transition: 'padding 0.3s ease-in-out',
         }}
       >
-       {
-        expanded ? 
-        <NavItem key={generalSettingsSitemap.pathName} item={generalSettingsSitemap} level={0} />
-        :
-      <SlimNavItem key={generalSettingsSitemap.pathName} item={generalSettingsSitemap} level={0} />
-       }
+        {expanded ? (
+          <NavItem key={settingsSitemap.pathName} item={settingsSitemap} level={0} />
+        ) : (
+          <SlimNavItem
+            key={settingsSitemap.pathName}
+            item={settingsSitemap}
+            level={0}
+          />
+        )}
       </Box>
+
+      {/* Subscription Package Widget */}
+      <SidebarSubscriptionWidget expanded={expanded} />
+
       <Box
         sx={{
           borderTop: 1,
@@ -201,7 +244,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
           transition: 'justify-content 0.3s ease-in-out',
         }}
       >
-        <Tooltip title={sidenavCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'} placement="top">
+        <Tooltip title={sidenavCollapsed ? t('expand_sidebar') : t('collapse_sidebar')} placement="top">
           <Button
             onClick={toggleNavbarCollapse}
             color="neutral"
@@ -220,7 +263,11 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
             startIcon={
               expanded ? (
                 <IconifyIcon
-                  icon={sidenavCollapsed ? 'material-symbols:keyboard-double-arrow-right' : 'material-symbols:keyboard-double-arrow-left'}
+                  icon={
+                    sidenavCollapsed
+                      ? 'material-symbols:keyboard-double-arrow-right'
+                      : 'material-symbols:keyboard-double-arrow-left'
+                  }
                   sx={{ fontSize: 20, transition: 'transform 0.3s ease-in-out' }}
                 />
               ) : undefined
@@ -228,26 +275,110 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
           >
             {!expanded && (
               <IconifyIcon
-                icon={sidenavCollapsed ? 'material-symbols:keyboard-double-arrow-right' : 'material-symbols:keyboard-double-arrow-left'}
+                icon={
+                  sidenavCollapsed
+                    ? 'material-symbols:keyboard-double-arrow-right'
+                    : 'material-symbols:keyboard-double-arrow-left'
+                }
                 sx={{ fontSize: 20, transition: 'transform 0.3s ease-in-out' }}
               />
             )}
             {expanded && (
-              <Typography 
-                variant="subtitle2" 
+              <Typography
+                variant="subtitle2"
                 fontWeight={400}
                 sx={{
                   transition: 'opacity 0.3s ease-in-out',
                   opacity: expanded ? 1 : 0,
                 }}
               >
-                {sidenavCollapsed ? 'Expand' : 'Collapse'}
+                {sidenavCollapsed ? t('expand') : t('collapse')}
               </Typography>
             )}
           </Button>
         </Tooltip>
       </Box>
     </>
+  );
+};
+
+const statusColors: Record<string, 'success' | 'warning' | 'info' | 'error'> = {
+  TRIAL: 'info',
+  ACTIVE: 'success',
+  PENDING: 'warning',
+  EXPIRED: 'error',
+};
+
+const statusLabels: Record<string, string> = {
+  TRIAL: 'free_trial',
+  ACTIVE: 'active',
+  PENDING: 'pending_activation',
+  EXPIRED: 'expired',
+};
+
+const SidebarSubscriptionWidget = ({ expanded }: { expanded: boolean }) => {
+  const { t } = useTranslation();
+  const subscription = useAtomValue(subscriptionAtom);
+  const role = useAtomValue(userRoleAtom);
+
+  if (!subscription || (role !== 'OWNER' && role !== 'ADMIN')) return null;
+
+  const color = statusColors[subscription.status] ?? 'error';
+  const label = statusLabels[subscription.status] ?? 'expired';
+  const endDate = subscription.endDate ? new Date(subscription.endDate) : null;
+  const daysRemaining = endDate
+    ? Math.max(0, Math.ceil((endDate.getTime() - Date.now()) / 86400000))
+    : null;
+  const isActive = subscription.status === 'TRIAL' || subscription.status === 'ACTIVE';
+
+  if (!expanded) {
+    return (
+      <Box sx={{ px: 2, pb: 1, display: 'flex', justifyContent: 'center' }}>
+        <Tooltip title={t(label)} placement="right">
+          <IconButton
+            component={Link}
+            href={paths.manage_subscription}
+            size="small"
+            sx={{ color: `${color}.main` }}
+          >
+            <IconifyIcon icon="material-symbols:card-membership-outline" sx={{ fontSize: 20 }} />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    );
+  }
+
+  return (
+    <Button
+      component={Link}
+      href={paths.manage_subscription}
+      variant="text"
+      color="neutral"
+      fullWidth
+      sx={{
+        mx: 'auto',
+        mb: 0.5,
+        px: 3,
+        py: 0.75,
+        justifyContent: 'space-between',
+        textTransform: 'none',
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <IconifyIcon icon="material-symbols:card-membership-outline" sx={{ fontSize: 18, color: 'text.secondary' }} />
+        <Typography variant="caption" fontWeight={600} color="text.primary">
+          {t(label)}
+        </Typography>
+      </Box>
+      {isActive && daysRemaining !== null && (
+        <Chip
+          label={daysRemaining === 0 ? t('expires_today') : `${daysRemaining}d`}
+          size="small"
+          color={daysRemaining <= 3 ? 'error' : daysRemaining <= 7 ? 'warning' : color}
+          sx={{ height: 18, fontSize: '0.6rem', fontWeight: 700 }}
+        />
+      )}
+    </Button>
   );
 };
 

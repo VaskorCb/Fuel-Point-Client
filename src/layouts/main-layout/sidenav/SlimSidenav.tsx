@@ -1,12 +1,14 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
+import { useAtomValue } from 'jotai';
 import { useSettingsContext } from 'providers/SettingsProvider';
 import sitemap from 'routes/sitemap';
+import { userRoleAtom } from 'store/auth';
 import { sidenavVibrantStyle } from 'theme/styles/vibrantNav';
 import Logo from 'components/common/Logo';
 import VibrantBackground from 'components/common/VibrantBackground';
@@ -19,6 +21,22 @@ const SlimSidenav = () => {
     config: { sidenavCollapsed, drawerWidth, navColor, navigationMenuType },
   } = useSettingsContext();
   const { sidenavAppbarVariant } = useNavContext();
+
+  const userRole = useAtomValue(userRoleAtom);
+
+  const filteredSitemap = useMemo(
+    () =>
+      sitemap
+        .filter((group) => !group.roles || !userRole || group.roles.includes(userRole))
+        .map((group) => ({
+          ...group,
+          items: group.items.filter(
+            (item) => !item.roles || !userRole || item.roles.includes(userRole),
+          ),
+        }))
+        .filter((group) => group.items.length > 0),
+    [userRole],
+  );
 
   const drawer = (
     <>
@@ -56,7 +74,7 @@ const SlimSidenav = () => {
                 p: 2,
               }}
             >
-              {sitemap.map((menu, index) => (
+              {filteredSitemap.map((menu, index) => (
                 <Fragment key={menu.id}>
                   <List
                     component="nav"
@@ -71,7 +89,7 @@ const SlimSidenav = () => {
                       <SlimNavItem key={item.pathName} item={item} level={0} />
                     ))}
                   </List>
-                  {index !== sitemap.length - 1 && <Divider sx={[{ my: 1.5 }]} />}
+                  {index !== filteredSitemap.length - 1 && <Divider sx={[{ my: 1.5 }]} />}
                 </Fragment>
               ))}
             </Box>

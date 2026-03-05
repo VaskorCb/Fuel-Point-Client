@@ -17,8 +17,8 @@ const Login = () => {
   return (
     <LoginForm
       handleLogin={handleLogin}
-      signUpLink={paths.defaultJwtSignup}
-      forgotPasswordLink={paths.defaultJwtForgotPassword}
+      signUpLink={paths.signup}
+      forgotPasswordLink={paths.forgotPassword}
       defaultCredential={defaultJwtAuthCredentials}
     />
   );

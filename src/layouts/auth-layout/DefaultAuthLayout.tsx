@@ -99,7 +99,7 @@ const DefaultAuthLayout = ({ children }: PropsWithChildren) => {
               <Tab
                 component={Link}
                 underline="none"
-                href={paths.defaultJwtLogin}
+                href={paths.login}
                 value="jwt"
                 label="jwt"
                 icon={<JwtIcon />}
@@ -110,7 +110,7 @@ const DefaultAuthLayout = ({ children }: PropsWithChildren) => {
               <Tab
                 component={Link}
                 underline="none"
-                href={paths.defaultAuth0Login}
+                href={paths.login}
                 value="auth0"
                 label="Auth 0"
                 icon={<Auth0Icon />}
@@ -121,7 +121,7 @@ const DefaultAuthLayout = ({ children }: PropsWithChildren) => {
               <Tab
                 component={Link}
                 underline="none"
-                href={paths.defaultFirebaseLogin}
+                href={paths.login}
                 value="firebase"
                 label="Firebase"
                 icon={<FirebaseIcon />}

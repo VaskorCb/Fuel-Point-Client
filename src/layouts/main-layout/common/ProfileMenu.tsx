@@ -1,8 +1,6 @@
 'use client';
 
-import { signOut, useSession } from 'next-auth/react';
-import { PropsWithChildren, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { PropsWithChildren, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -18,11 +16,11 @@ import Switch from '@mui/material/Switch';
 import { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
+import { useAuth } from 'services/auth/auth.hooks';
 import { useThemeMode } from 'hooks/useThemeMode';
-import { demoUser } from 'lib/next-auth/nextAuthOptions';
 import { useBreakpoints } from 'providers/BreakpointsProvider';
 import { useSettingsContext } from 'providers/SettingsProvider';
-import paths, { authPaths } from 'routes/paths';
+import { authPaths } from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
 
@@ -37,7 +35,6 @@ interface ProfileMenuItemProps extends MenuItemProps {
 }
 
 const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { up } = useBreakpoints();
   const upSm = up('sm');
@@ -46,10 +43,7 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
   } = useSettingsContext();
 
   const { isDark, setThemeMode } = useThemeMode();
-
-  const { data } = useSession();
-  // Use demoUser as fallback if no session user
-  const user = useMemo(() => data?.user || demoUser, [data?.user]);
+  const { user, isAuthenticated, logout } = useAuth();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,7 +73,6 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
       <StatusAvatar
         alt={user?.name}
         status="online"
-        src={user?.image || undefined}
         sx={[
           {
             width: 40,
@@ -96,7 +89,7 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
     <>
       {type === 'slim' && upSm ? (
         <Button color="neutral" variant="text" size="small" onClick={handleClick}>
-          {user?.name}
+          {user?.name ?? 'Account'}
         </Button>
       ) : (
         menuButton
@@ -130,7 +123,6 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
           <StatusAvatar
             status="online"
             alt={user?.name}
-            src={user?.image || undefined}
             sx={{ width: 48, height: 48 }}
           />
           <Box>
@@ -141,23 +133,8 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
                 mb: 0.5,
               }}
             >
-              {user?.name}
+              {user?.name ?? 'Account'}
             </Typography>
-            {user?.designation && (
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  color: 'warning.main',
-                }}
-              >
-                {user?.designation}
-                <IconifyIcon
-                  icon="material-symbols:diamond-rounded"
-                  color="warning.main"
-                  sx={{ verticalAlign: 'text-bottom', ml: 0.5 }}
-                />
-              </Typography>
-            )}
           </Box>
         </Stack>
         <Divider />
@@ -197,17 +174,11 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
         </Box>
         <Divider />
         <Box sx={{ py: 1 }}>
-          {data?.user ? (
+          {isAuthenticated ? (
             <ProfileMenuItem
               onClick={async () => {
-                const res = await signOut({
-                  redirect: false,
-                  callbackUrl: paths.defaultLoggedOut,
-                });
-
-                if (res.url) {
-                  router.push(res.url);
-                }
+                handleClose();
+                await logout();
               }}
               icon="material-symbols:logout-rounded"
             >

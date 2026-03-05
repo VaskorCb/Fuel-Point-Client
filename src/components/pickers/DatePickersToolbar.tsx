@@ -4,9 +4,11 @@ import { typographyClasses } from '@mui/material/Typography';
 import { DatePickerToolbar, DatePickerToolbarProps } from '@mui/x-date-pickers';
 import { usePickerContext } from '@mui/x-date-pickers/hooks';
 import { pickersToolbarClasses } from '@mui/x-date-pickers/internals';
+import dayjs from 'dayjs';
 
 const DatePickersToolbar = ({ className, ...other }: DatePickerToolbarProps) => {
   const { value } = usePickerContext();
+  const year = value ? dayjs(value).year() : null;
 
   return (
     <Box sx={(theme) => ({ p: theme.spacing(3, 3, 0, 3), width: 1 })} className={className}>
@@ -14,7 +16,7 @@ const DatePickersToolbar = ({ className, ...other }: DatePickerToolbarProps) => 
         Select Date
       </Typography>
       <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-        {value?.year()}
+        {year ?? ''}
       </Typography>
       <DatePickerToolbar
         {...other}

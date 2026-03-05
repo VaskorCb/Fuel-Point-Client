@@ -3,17 +3,17 @@
 import { ReactNode, useEffect, useLayoutEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import { useThemeMode } from 'hooks/useThemeMode';
 import SettingsPanelProvider from 'providers/SettingsPanelProvider';
 import { useSettingsContext } from 'providers/SettingsProvider';
 import { REFRESH } from 'reducers/SettingsReducer';
-const SettingsPanel = dynamic(() => import('components/settings-panel/SettingsPanel'), {
-  ssr: false,
-});
 
-const SettingPanelToggler = dynamic(() => import('components/settings-panel/SettingPanelToggler'), {
-  ssr: false,
-});
+// const SettingsPanel = dynamic(() => import('components/settings-panel/SettingsPanel'), {
+//   ssr: false,
+// });
+
+// const SettingPanelToggler = dynamic(() => import('components/settings-panel/SettingPanelToggler'), {
+//   ssr: false,
+// });
 
 const App = ({
   children,
@@ -21,7 +21,6 @@ const App = ({
   children: ReactNode;
 }>) => {
   const pathname = usePathname();
-  const { mode } = useThemeMode();
   const { configDispatch } = useSettingsContext();
 
   useEffect(() => {
@@ -30,13 +29,13 @@ const App = ({
 
   useLayoutEffect(() => {
     configDispatch({ type: REFRESH });
-  }, [mode]);
+  }, [configDispatch]);
 
   return (
     <SettingsPanelProvider>
       {children}
-      <SettingsPanel />
-      <SettingPanelToggler />
+      {/* <SettingsPanel /> */}
+      {/* <SettingPanelToggler /> */}
     </SettingsPanelProvider>
   );
 };
