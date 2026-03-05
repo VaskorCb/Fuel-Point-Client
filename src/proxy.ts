@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const authRoutes = ['/sign-in', '/sign-up', '/forgot-password', '/2fa', '/set-password'];
-const alwaysAccessible = ['/logged-out', '/globe-demo', '/landing-preview'];
+const alwaysAccessible = ['/logged-out', '/globe-demo', '/landing-preview', '/how-it-works'];
 
 async function tryRefreshToken(refreshToken: string): Promise<string[] | null> {
   try {
