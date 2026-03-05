@@ -46,37 +46,45 @@ const LanguageMenu = ({ type = 'default' }: LanguageMenuProps) => {
     <>
       <Button
         color="neutral"
-        size= "large"
+        size={type === 'slim' ? 'small' : 'large'}
         variant="outlined"
         onClick={handleClick}
-        sx={
-          (theme) => ({
-          px: type === 'slim' ? 1 : 1.5,
-          gap: 1,
+        sx={(theme) => ({
+          px: { xs: 1, sm: type === 'slim' ? 1 : 1.5 },
+          gap: { xs: 0, sm: 1 },
           minWidth: 'auto',
-          backgroundColor: "rgba(255, 255, 255, 0.12)",
-          borderColor: "rgba(255, 255, 255, 0.30)",
+          minHeight: { xs: 36, sm: 'auto' },
+          backgroundColor: 'rgba(255, 255, 255, 0.12)',
+          borderColor: 'rgba(255, 255, 255, 0.30)',
           borderWidth: 1,
           borderRadius: 1,
           '&:hover': {
-            backgroundColor: "rgba(255, 255, 255, 0.12)",
-            borderColor: "rgba(255, 255, 255, 0.30)",
+            backgroundColor: 'rgba(255, 255, 255, 0.12)',
+            borderColor: 'rgba(255, 255, 255, 0.30)',
           },
         })}
-      > 
-        <IconifyIcon icon={selectedLanguage.icon} sx={{ fontSize: type === 'slim' ? 20 : 24 }} />
-        <Typography variant="subtitle2" sx={ (theme) => ({ color: theme.palette.neutral.contrastText }) }>{selectedLanguage.label}</Typography>
-        <IconifyIcon 
-          icon="eva:chevron-down-fill" 
-          sx={
-            (theme) => ({ 
-              fontSize: type === 'slim' ? 16 : 24,
-              transition: 'transform 0.2s',
-              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-              color: theme.palette.neutral.contrastText,
-              
-            })
-          } 
+      >
+        <IconifyIcon
+          icon={selectedLanguage.icon}
+          sx={{ fontSize: { xs: 20, sm: type === 'slim' ? 20 : 24 } }}
+        />
+        <Typography
+          variant="subtitle2"
+          sx={(theme) => ({
+            color: theme.palette.neutral.contrastText,
+            display: { xs: 'none', sm: 'block' },
+          })}
+        >
+          {selectedLanguage.label}
+        </Typography>
+        <IconifyIcon
+          icon="eva:chevron-down-fill"
+          sx={(theme) => ({
+            fontSize: { xs: 16, sm: type === 'slim' ? 16 : 24 },
+            transition: 'transform 0.2s',
+            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+            color: theme.palette.neutral.contrastText,
+          })}
         />
       </Button>
       <Menu

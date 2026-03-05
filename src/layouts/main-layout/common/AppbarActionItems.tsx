@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { SxProps } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
@@ -19,17 +20,22 @@ const AppbarActionItems = ({ type = 'default', sx, searchComponent }: AppbarActi
   return (
     <Stack
       className="action-items"
-      spacing={1}
+      direction="row"
+      spacing={{ xs: 0.5, sm: 1 }}
       sx={{
         alignItems: 'center',
         ml: 'auto',
+        flexShrink: 0,
+        minWidth: 0,
         ...sx,
       }}
     >
       {searchComponent}
       <LanguageMenu type={type} />
       <ThemeToggler type={type} />
-      <Chat />
+      <Box component="span" sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
+        <Chat />
+      </Box>
       <NotificationMenu type={type} />
       <ProfileMenu type={type} />
     </Stack>

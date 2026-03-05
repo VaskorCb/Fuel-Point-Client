@@ -77,7 +77,7 @@ const ComboLayout = ({ children }: PropsWithChildren) => {
                 [`& .${drawerClasses.paper}`]: {
                   pt: 3,
                   boxSizing: 'border-box',
-                  width: mainDrawerWidth.full,
+                  width: 'min(300px, calc(100vw - 32px))',
                 },
               },
               navColor === 'vibrant' && sidenavVibrantStyle,

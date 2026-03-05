@@ -42,14 +42,15 @@ const Topnav = () => {
       ]}
     >
       {navColor === 'vibrant' && <VibrantBackground position="top" />}
-      <Toolbar variant="appbar" sx={{ px: { xs: 3, md: 5, position: 'relative' } }}>
+      <Toolbar variant="appbar" sx={{ px: { xs: 1.5, sm: 2, md: 5 }, position: 'relative' }}>
         <Box
           sx={{
-            display: { xs: 'flex' },
+            display: 'flex',
             alignItems: 'center',
-            gap: 1,
-            pr: 2,
-            mr: 1,
+            gap: { xs: 0.5, sm: 1 },
+            pr: { xs: 1, sm: 2 },
+            mr: { xs: 0.5, sm: 1 },
+            minWidth: 0,
           }}
         >
           <IconButton
@@ -83,7 +84,7 @@ const Topnav = () => {
           {upLg && <TopnavItems />}
           <AppbarActionItems
             searchComponent={
-              <Box sx={{ pr: 1.5 }}>
+              <Box sx={{ pr: { xs: 0.5, sm: 1.5 } }}>
                 <SearchBoxButton variant="soft" color="neutral" />
               </Box>
             }

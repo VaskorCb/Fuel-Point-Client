@@ -33,17 +33,17 @@ const TopNavStacked = () => {
     >
       <Toolbar
         sx={{
-          minHeight: 64,
-          height: 64,
-          px: { xs: 2, sm: 3 },
+          minHeight: { xs: 56, sm: 64 },
+          height: { xs: 56, sm: 64 },
+          px: { xs: 1.5, sm: 2, md: 3 },
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 2,
+          gap: { xs: 1, sm: 2 },
         }}
       >
         {/* Left: Menu + Logo */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, minWidth: 0, flex: 1 }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -94,7 +94,7 @@ const TopNavStacked = () => {
         </Box>
 
         {/* Right: Actions */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.25, sm: 0.5 }, flexShrink: 0 }}>
           <AppbarActionItems sx={{ ml: 0 }} />
         </Box>
       </Toolbar>

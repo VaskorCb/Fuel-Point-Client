@@ -48,13 +48,14 @@ const TopnavSlim = ({ sx }: TopnavSlimProps) => {
       ]}
     >
       {navColor === 'vibrant' && <VibrantBackground position="top" />}
-      <Toolbar variant="appbarSlim" sx={{ px: { xs: 3, md: 5 }, maxHeight: 38 }}>
+      <Toolbar variant="appbarSlim" sx={{ px: { xs: 1.5, sm: 2, md: 5 }, maxHeight: 38, minHeight: { xs: 48, md: 38 } }}>
         <Box
           sx={{
-            display: { xs: 'flex' },
+            display: 'flex',
             alignItems: 'center',
-            gap: 1,
-            mr: 3,
+            gap: { xs: 0.5, sm: 1 },
+            mr: { xs: 1, sm: 2, md: 3 },
+            minWidth: 0,
           }}
         >
           <IconButton

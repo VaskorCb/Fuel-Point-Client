@@ -108,7 +108,10 @@ const ProfileMenu = ({ type = 'default' }: ProfileMenuProps) => {
           vertical: 'bottom',
         }}
         sx={{
-          [`& .${paperClasses.root}`]: { minWidth: 320 },
+          [`& .${paperClasses.root}`]: {
+            minWidth: { xs: 280, sm: 320 },
+            maxWidth: { xs: 'calc(100vw - 32px)', sm: 'none' },
+          },
           [`& .${listClasses.root}`]: { py: 0 },
         }}
       >

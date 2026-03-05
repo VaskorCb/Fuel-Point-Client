@@ -106,8 +106,10 @@ const NotificationMenu = ({ type = 'default' }: NotificationMenuProps) => {
         }}
         sx={{
           [`& .${paperClasses.root}`]: {
-            width: 400,
-            height: 650,
+            width: { xs: 'calc(100vw - 32px)', sm: 400 },
+            maxWidth: 400,
+            height: { xs: '80vh', sm: 650 },
+            maxHeight: 650,
             display: 'flex',
             flexDirection: 'column',
           },

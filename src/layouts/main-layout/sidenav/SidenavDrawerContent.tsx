@@ -87,8 +87,8 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
               alignItems: 'center',
             },
             expanded && {
-              pl: { xs: 4, md: 6 },
-              pr: { xs: 2, md: 3 },
+              pl: { xs: 2, sm: 4, md: 6 },
+              pr: { xs: 1.5, sm: 2, md: 3 },
             },
           ]}
         >
@@ -138,7 +138,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
                 px: 2,
               },
               expanded && {
-                px: { xs: 2, md: 4 },
+                px: { xs: 1.5, sm: 2, md: 4 },
               },
             ]}
           >
