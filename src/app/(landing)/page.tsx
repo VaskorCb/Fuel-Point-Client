@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
@@ -11,6 +11,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Rating from '@mui/material/Rating';
 import { alpha } from '@mui/material/styles';
 import IconifyIcon from 'components/base/IconifyIcon';
 import petrolPumpIcon from '../../../public/assets/logos/petrol-pump-icon.svg';
@@ -89,6 +91,109 @@ const STEPS = [
     description: 'Use dashboards and reports to understand your business and make better decisions.',
   },
 ];
+
+const STATS = [
+  { label: 'Happy Users', value: 2500, suffix: '+', icon: 'solar:users-group-rounded-bold' },
+  { label: 'Fuel Stations', value: 850, suffix: '+', icon: 'solar:gas-station-bold' },
+  { label: 'Sales Processed', value: 1.2, suffix: 'M+', icon: 'solar:cart-large-2-bold' },
+  { label: 'Uptime', value: 99.9, suffix: '%', icon: 'solar:shield-check-bold' },
+];
+
+const REVIEWS = [
+  {
+    name: 'Karim Hossain',
+    role: 'Station Owner, Dhaka',
+    avatar: 'KH',
+    rating: 5,
+    review:
+      'Fuel Point completely transformed how I manage my station. The shift management and real-time sales tracking saved us hours every day.',
+  },
+  {
+    name: 'Rashida Begum',
+    role: 'Manager, Chittagong',
+    avatar: 'RB',
+    rating: 5,
+    review:
+      'Before Fuel Point, we used paper logs for everything. Now our reports are instant, credits are tracked automatically, and I can monitor from my phone.',
+  },
+  {
+    name: 'Tanvir Ahmed',
+    role: 'Owner, Sylhet',
+    avatar: 'TA',
+    rating: 4,
+    review:
+      'The onboarding was so smooth — I set up 3 pumps, added my team, and started selling within 30 minutes. Customer support is excellent too.',
+  },
+  {
+    name: 'Farhan Islam',
+    role: 'Multi-Station Owner',
+    avatar: 'FI',
+    rating: 5,
+    review:
+      'Managing 5 stations used to be a nightmare. With Fuel Point dashboards and reports, I have full visibility across all locations in one place.',
+  },
+  {
+    name: 'Nusrat Jahan',
+    role: 'Accountant, Rajshahi',
+    avatar: 'NJ',
+    rating: 5,
+    review:
+      'The expense tracking and bank deposit features are a lifesaver. Monthly reconciliation that used to take 2 days now takes 2 hours.',
+  },
+  {
+    name: 'Arif Rahman',
+    role: 'Station Manager, Khulna',
+    avatar: 'AR',
+    rating: 4,
+    review:
+      'Tank dipping and inventory management are incredibly accurate. We reduced fuel discrepancies by 95% in the first month.',
+  },
+];
+
+function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          const duration = 2000;
+          const steps = 60;
+          const increment = value / steps;
+          let current = 0;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= value) {
+              setCount(value);
+              clearInterval(timer);
+            } else {
+              setCount(Number(current.toFixed(1)));
+            }
+          }, duration / steps);
+        }
+      },
+      { threshold: 0.3 },
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [value, hasAnimated]);
+
+  const display = Number.isInteger(value) ? Math.floor(count).toLocaleString() : count.toFixed(1);
+
+  return (
+    <Typography
+      ref={ref}
+      variant="h3"
+      sx={{ fontWeight: 800, color: 'primary.main', lineHeight: 1 }}
+    >
+      {display}
+      {suffix}
+    </Typography>
+  );
+}
 
 export default function LandingPage() {
   const router = useRouter();
@@ -342,6 +447,56 @@ export default function LandingPage() {
         </Container>
       </Box>
 
+      {/* Stats Counter */}
+      <Box
+        component="section"
+        sx={{
+          py: { xs: 6, md: 8 },
+          background: (theme) =>
+            theme.palette.mode === 'dark'
+              ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, ${alpha(theme.palette.primary.dark, 0.12)} 100%)`
+              : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.04)} 0%, ${alpha(theme.palette.primary.light, 0.08)} 100%)`,
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+              gap: { xs: 3, md: 4 },
+            }}
+          >
+            {STATS.map((stat) => (
+              <Box key={stat.label} sx={{ textAlign: 'center' }}>
+                <Box
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 3,
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mx: 'auto',
+                    mb: 1.5,
+                  }}
+                >
+                  <IconifyIcon icon={stat.icon} sx={{ fontSize: 28, color: 'primary.main' }} />
+                </Box>
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 0.5, fontWeight: 600, letterSpacing: 0.5 }}
+                >
+                  {stat.label}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Container>
+      </Box>
+
       {/* How it works */}
       <Box
         ref={howItWorksRef}
@@ -434,6 +589,23 @@ export default function LandingPage() {
                 </CardContent>
               </Card>
             ))}
+          </Box>
+          <Box sx={{ textAlign: 'center', mt: 5 }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => router.push('/how-it-works')}
+              endIcon={<IconifyIcon icon="solar:arrow-right-bold" />}
+              sx={{
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 700,
+                borderRadius: 2,
+              }}
+            >
+              See full process guide
+            </Button>
           </Box>
         </Container>
       </Box>
@@ -581,6 +753,108 @@ export default function LandingPage() {
                   >
                     {pkg.cta}
                   </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        </Container>
+      </Box>
+
+      {/* User Reviews */}
+      <Box
+        component="section"
+        sx={{
+          py: { xs: 8, md: 12 },
+          bgcolor: 'background.default',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="overline"
+            sx={{
+              display: 'block',
+              textAlign: 'center',
+              color: 'primary.main',
+              fontWeight: 700,
+              letterSpacing: 2,
+              mb: 1,
+            }}
+          >
+            Testimonials
+          </Typography>
+          <Typography
+            variant="h2"
+            sx={{
+              textAlign: 'center',
+              fontWeight: 700,
+              fontSize: { xs: '2rem', md: '2.5rem' },
+              mb: 1.5,
+            }}
+          >
+            Loved by station owners
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ textAlign: 'center', mb: 6, maxWidth: 600, mx: 'auto' }}
+          >
+            See what fuel station owners and managers are saying about Fuel Point.
+          </Typography>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+              gap: 3,
+            }}
+          >
+            {REVIEWS.map((review) => (
+              <Card
+                key={review.name}
+                variant="outlined"
+                sx={{
+                  height: 1,
+                  borderRadius: 3,
+                  borderColor: 'divider',
+                  transition: 'all 0.25s ease',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    transform: 'translateY(-4px)',
+                    boxShadow: (theme) =>
+                      `0 12px 32px ${alpha(theme.palette.primary.main, 0.1)}`,
+                  },
+                }}
+              >
+                <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: 1 }}>
+                  <Rating value={review.rating} readOnly size="small" sx={{ mb: 2 }} />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ flex: 1, lineHeight: 1.7, mb: 2.5, fontStyle: 'italic' }}
+                  >
+                    &ldquo;{review.review}&rdquo;
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Avatar
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.15),
+                        color: 'primary.main',
+                        fontWeight: 700,
+                        fontSize: 14,
+                      }}
+                    >
+                      {review.avatar}
+                    </Avatar>
+                    <Box>
+                      <Typography variant="subtitle2" fontWeight={700}>
+                        {review.name}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {review.role}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </CardContent>
               </Card>
             ))}
