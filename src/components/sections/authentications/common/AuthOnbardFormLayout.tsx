@@ -2,6 +2,7 @@
 
 import { PropsWithChildren } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import petrolPumpIcon from 'assets/logos/petrol-pump-icon.svg';
@@ -25,8 +26,10 @@ const AuthFormLayout = ({ children }: AuthFormLayoutProps) => {
         px: { xs: 5, sm: 6, md: 8 },
       }}
     >
-      {/* Logo - centered at top */}
+      {/* Logo - centered at top, clickable to go home */}
       <Box
+        component={Link}
+        href="/"
         sx={{
           display: 'flex',
           flexDirection: 'row',
@@ -34,6 +37,9 @@ const AuthFormLayout = ({ children }: AuthFormLayoutProps) => {
           justifyContent: 'center',
           gap: 2,
           mb: 5,
+          textDecoration: 'none',
+          color: 'inherit',
+          '&:hover': { opacity: 0.85 },
         }}
       >
         <Box

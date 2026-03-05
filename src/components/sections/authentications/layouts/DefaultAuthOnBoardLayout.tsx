@@ -1,8 +1,11 @@
 'use client';
 
 import { PropsWithChildren, Suspense } from 'react';
+import Link from 'next/link';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
+import IconifyIcon from 'components/base/IconifyIcon';
 import DefaultLoader from 'components/loading/DefaultLoader';
 import FuelStationAnimatedPanel from 'components/sections/authentications/common/FuelStationAnimatedPanel';
 
@@ -57,6 +60,24 @@ const DefaultAuthOnBoardLayout = ({ children }: PropsWithChildren) => {
             minWidth: 0,
           }}
         >
+          {/* Back to home - outside card */}
+          <Button
+            component={Link}
+            href="/"
+            startIcon={<IconifyIcon icon="material-symbols:arrow-back-rounded" sx={{ fontSize: 20 }} />}
+            sx={{
+              mb: 2,
+              color: 'text.secondary',
+              fontWeight: 600,
+              '&:hover': {
+                bgcolor: 'action.hover',
+                color: 'text.primary',
+              },
+            }}
+          >
+            Back to home
+          </Button>
+
           <Box
             sx={{
               bgcolor: 'background.paper',

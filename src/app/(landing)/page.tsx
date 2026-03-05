@@ -1,10 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Drawer from '@mui/material/Drawer';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
@@ -91,10 +93,44 @@ const STEPS = [
 export default function LandingPage() {
   const router = useRouter();
   const howItWorksRef = useRef<HTMLDivElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToHowItWorks = () => {
+    setMobileMenuOpen(false);
     howItWorksRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  const navButtons = (
+    <>
+      <Button
+        color="inherit"
+        onClick={scrollToHowItWorks}
+        sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}
+      >
+        How it works
+      </Button>
+      <Button
+        color="inherit"
+        onClick={() => {
+          setMobileMenuOpen(false);
+          router.push(paths.login);
+        }}
+        sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}
+      >
+        Sign in
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => {
+          setMobileMenuOpen(false);
+          router.push(paths.signup);
+        }}
+        sx={{ fontWeight: 600, px: 2, whiteSpace: 'nowrap' }}
+      >
+        Get started
+      </Button>
+    </>
+  );
 
   return (
     <>
@@ -121,38 +157,71 @@ export default function LandingPage() {
               gap: 2,
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexShrink: 0 }}>
               <Image src={petrolPumpIcon} alt="Fuel Point" width={36} height={36} />
-              <Typography variant="h6" fontWeight={700} color="text.primary">
+              <Typography variant="h6" fontWeight={700} color="text.primary" sx={{ whiteSpace: 'nowrap' }}>
                 Fuel Point
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button
-                color="inherit"
-                onClick={scrollToHowItWorks}
-                sx={{ fontWeight: 600 }}
-              >
-                How it works
-              </Button>
+            {/* Desktop nav */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+              {navButtons}
+            </Box>
+            {/* Mobile: Sign in + hamburger menu */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 0.5 }}>
               <Button
                 color="inherit"
                 onClick={() => router.push(paths.login)}
-                sx={{ fontWeight: 600 }}
+                sx={{ fontWeight: 600, whiteSpace: 'nowrap', minWidth: 'auto', px: 1.5 }}
               >
                 Sign in
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => router.push(paths.signup)}
-                sx={{ fontWeight: 600, px: 2 }}
+              <IconButton
+                aria-label="open menu"
+                onClick={() => setMobileMenuOpen(true)}
+                sx={{ color: 'text.primary' }}
               >
-                Get started
-              </Button>
+                <IconifyIcon icon="material-symbols:menu-rounded" sx={{ fontSize: 28 }} />
+              </IconButton>
             </Box>
           </Box>
         </Container>
       </Box>
+
+      {/* Mobile menu drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            width: 280,
+            pt: 3,
+            px: 2,
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, '& .MuiButton-root': { justifyContent: 'flex-start' } }}>
+          <Button
+            color="inherit"
+            onClick={scrollToHowItWorks}
+            sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}
+          >
+            How it works
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              router.push(paths.signup);
+            }}
+            sx={{ fontWeight: 600, px: 2, whiteSpace: 'nowrap' }}
+          >
+            Get started
+          </Button>
+        </Box>
+      </Drawer>
 
       {/* Hero */}
       <Box
