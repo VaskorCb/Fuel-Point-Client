@@ -564,10 +564,10 @@ export default function LandingPage() {
             {/* Floating 3D feature cards */}
             <Box
               sx={{
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'center',
-                gap: 3,
-                mt: 8,
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+                gap: { xs: 1.5, md: 3 },
+                mt: { xs: 5, md: 8 },
                 perspective: '1200px',
                 animation: 'fadeInUp 0.8s ease-out 0.5s both',
               }}
@@ -583,9 +583,9 @@ export default function LandingPage() {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 1.5,
-                    px: 2.5,
-                    py: 1.5,
+                    gap: { xs: 1, md: 1.5 },
+                    px: { xs: 1.5, md: 2.5 },
+                    py: { xs: 1.25, md: 1.5 },
                     borderRadius: 3,
                     bgcolor: (theme) => alpha(theme.palette.background.paper, 0.7),
                     border: '1px solid',
@@ -593,11 +593,17 @@ export default function LandingPage() {
                     backdropFilter: 'blur(20px)',
                     boxShadow: (theme) =>
                       `0 8px 32px ${alpha(theme.palette.common.black, 0.06)}, 0 2px 8px ${alpha(theme.palette.common.black, 0.04)}`,
-                    transform: `rotateX(5deg) rotateY(${i < 2 ? '-' : ''}${i === 0 || i === 3 ? '6' : '2'}deg) translateZ(${i === 1 || i === 2 ? '20px' : '0px'})`,
+                    transform: {
+                      xs: 'none',
+                      md: `rotateX(5deg) rotateY(${i < 2 ? '-' : ''}${i === 0 || i === 3 ? '6' : '2'}deg) translateZ(${i === 1 || i === 2 ? '20px' : '0px'})`,
+                    },
                     transition: 'all 0.4s ease',
                     cursor: 'default',
                     '&:hover': {
-                      transform: 'rotateX(0deg) rotateY(0deg) translateZ(30px) translateY(-6px)',
+                      transform: {
+                        xs: 'translateY(-3px)',
+                        md: 'rotateX(0deg) rotateY(0deg) translateZ(30px) translateY(-6px)',
+                      },
                       boxShadow: (theme) =>
                         `0 16px 48px ${alpha(item.color, 0.15)}, 0 4px 12px ${alpha(theme.palette.common.black, 0.08)}`,
                       borderColor: alpha(item.color, 0.3),
@@ -606,8 +612,8 @@ export default function LandingPage() {
                 >
                   <Box
                     sx={{
-                      width: 40,
-                      height: 40,
+                      width: { xs: 34, md: 40 },
+                      height: { xs: 34, md: 40 },
                       borderRadius: 2,
                       bgcolor: alpha(item.color, 0.1),
                       display: 'flex',
@@ -616,9 +622,9 @@ export default function LandingPage() {
                       flexShrink: 0,
                     }}
                   >
-                    <IconifyIcon icon={item.icon} sx={{ fontSize: 22, color: item.color }} />
+                    <IconifyIcon icon={item.icon} sx={{ fontSize: { xs: 18, md: 22 }, color: item.color }} />
                   </Box>
-                  <Typography variant="body2" sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, whiteSpace: 'nowrap', fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                     {item.label}
                   </Typography>
                 </Box>
