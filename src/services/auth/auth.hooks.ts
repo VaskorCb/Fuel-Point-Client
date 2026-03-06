@@ -1,9 +1,13 @@
 'use client';
 
-import { useAtom, useAtomValue } from 'jotai';
-import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { setAuthCookies, clearAuthCookies } from 'actions/auth';
+import { useAtom, useAtomValue } from 'jotai';
 import paths from 'routes/paths';
+import { setAccessToken } from 'services/axiosInstance';
+import { queryKeys } from 'services/queryKeys';
 import { authStatusAtom, isAuthenticatedAtom, userAtom } from 'store/auth';
 import {
   ApiError,
@@ -17,10 +21,13 @@ import {
   SignupFormValues,
   SignupResponseData,
 } from 'types/auth-and-onboarding';
-import { queryKeys } from 'services/queryKeys';
-import { loginApi, signupApi, logoutApi, sendPasswordResetLinkApi, resetPasswordApi } from './auth.api';
-import { setAuthCookies, clearAuthCookies } from 'actions/auth';
-import toast from 'react-hot-toast';
+import {
+  loginApi,
+  signupApi,
+  logoutApi,
+  sendPasswordResetLinkApi,
+  resetPasswordApi,
+} from './auth.api';
 
 export function useAuth() {
   const [user, setUser] = useAtom(userAtom);
@@ -34,6 +41,9 @@ export function useAuth() {
     mutationFn: loginApi,
     onSuccess: async (data) => {
       const tokens = data.data;
+      if (tokens?.accessToken) {
+        setAccessToken(tokens.accessToken);
+      }
       if (tokens?.accessToken && tokens?.refreshToken) {
         await setAuthCookies(tokens.accessToken, tokens.refreshToken);
       }
@@ -48,6 +58,9 @@ export function useAuth() {
     mutationFn: signupApi,
     onSuccess: async (data) => {
       const tokens = data.data;
+      if (tokens?.accessToken) {
+        setAccessToken(tokens.accessToken);
+      }
       if (tokens?.accessToken && tokens?.refreshToken) {
         await setAuthCookies(tokens.accessToken, tokens.refreshToken);
       }
@@ -61,6 +74,7 @@ export function useAuth() {
   const logoutMutation = useMutation<LogoutResponseData, ApiError, void>({
     mutationFn: logoutApi,
     onSettled: async () => {
+      setAccessToken(null);
       await clearAuthCookies();
       setUser(null);
       setAuthStatus('unauthenticated');

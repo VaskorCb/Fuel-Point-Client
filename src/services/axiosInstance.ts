@@ -3,9 +3,28 @@ import { apiEndpoints } from 'routes/paths';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
+// In-memory token storage for cross-domain auth
+let _accessToken: string | null = null;
+
+export function setAccessToken(token: string | null) {
+  _accessToken = token;
+}
+
+export function getAccessToken() {
+  return _accessToken;
+}
+
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
+});
+
+// Request interceptor: attach Bearer token
+axiosInstance.interceptors.request.use((config) => {
+  if (_accessToken && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${_accessToken}`;
+  }
+  return config;
 });
 
 let isRefreshing = false;
@@ -51,7 +70,11 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axios.post(`${BASE_URL}${apiEndpoints.refresh}`, {}, { withCredentials: true });
+        const refreshRes = await axios.post(`${BASE_URL}${apiEndpoints.refresh}`, {}, { withCredentials: true });
+        const newAccessToken = refreshRes.data?.data?.accessToken || refreshRes.data?.accessToken;
+        if (newAccessToken) {
+          setAccessToken(newAccessToken);
+        }
 
         processQueue(null);
         return axiosInstance(originalRequest);
