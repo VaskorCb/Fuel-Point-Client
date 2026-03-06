@@ -84,7 +84,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     pathname,
   ]);
 
-  if (!isAuthRoute && profileQuery.isLoading) {
+  if (!isAuthRoute && (!tokenRestored || profileQuery.isLoading)) {
     return <PageLoader sx={{ height: '100vh' }} />;
   }
 
