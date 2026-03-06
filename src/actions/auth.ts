@@ -22,6 +22,11 @@ export async function setAuthCookies(accessToken: string, refreshToken: string) 
   });
 }
 
+export async function getAuthToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get('accessToken')?.value || null;
+}
+
 export async function clearAuthCookies() {
   const cookieStore = await cookies();
   cookieStore.delete('accessToken');

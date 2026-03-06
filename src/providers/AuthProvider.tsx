@@ -1,13 +1,15 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
 import { authStatusAtom, userAtom } from 'store/auth';
 import { ApiError, ProfileResponseData } from 'types/auth-and-onboarding';
 import { queryKeys } from 'services/queryKeys';
 import { getProfileApi } from 'services/auth/auth.api';
+import { getAuthToken } from 'actions/auth';
+import { setAccessToken, getAccessToken } from 'services/axiosInstance';
 import PageLoader from 'components/loading/PageLoader';
 
 const AUTH_ROUTES = ['/sign-in', '/sign-up', '/forgot-password', '/2fa', '/set-password', '/logged-out', '/landing-preview', '/how-it-works'];
@@ -17,8 +19,21 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const setAuthStatus = useSetAtom(authStatusAtom);
   const router = useRouter();
   const pathname = usePathname();
+  const [tokenRestored, setTokenRestored] = useState(() => !!getAccessToken());
 
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname?.startsWith(route) || pathname === '/');
+
+  // Restore token from Vercel cookie on page load/reload
+  useEffect(() => {
+    if (!tokenRestored && !isAuthRoute) {
+      getAuthToken().then((token) => {
+        if (token) setAccessToken(token);
+        setTokenRestored(true);
+      });
+    } else {
+      setTokenRestored(true);
+    }
+  }, [tokenRestored, isAuthRoute]);
 
   const profileQuery = useQuery<ProfileResponseData, ApiError>({
     queryKey: [...queryKeys.auth.profile],
@@ -26,7 +41,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    enabled: !isAuthRoute,
+    enabled: !isAuthRoute && tokenRestored,
   });
 
   useEffect(() => {
