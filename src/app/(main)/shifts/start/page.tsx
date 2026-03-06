@@ -23,6 +23,7 @@ import { useEmployees } from 'services/employees/employees.hooks';
 import { useNozzles } from 'services/pumps/pumps.hooks';
 import { useStartShift } from 'services/shifts/shifts.hooks';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import paths from 'routes/paths';
 import { MeterReadingInput, StartShiftPayload } from 'types/petrol-pump';
 import { useTranslation } from 'react-i18next';
@@ -67,6 +68,7 @@ const StartShiftPage = () => {
 
     startShift.mutate(payload, {
       onSuccess: () => {
+        toast.success(t('shift_started_successfully', 'Shift started successfully'));
         router.push(paths.shifts);
       },
     });
@@ -80,7 +82,11 @@ const StartShiftPage = () => {
 
       {startShift.isError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          {t('failed_start_shift')}
+          {(() => {
+            const err = startShift.error as { data?: { message?: string | string[] } } | undefined;
+            const msg = err?.data?.message;
+            return Array.isArray(msg) ? msg.join(', ') : msg || t('failed_start_shift');
+          })()}
         </Alert>
       )}
 

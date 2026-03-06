@@ -11,7 +11,8 @@ export const endShiftApi = (id: number, data: EndShiftPayload): Promise<ApiRespo
 };
 
 export const getShiftsApi = (date?: string): Promise<ApiResponse<Shift[]>> => {
-  return axiosInstance.get(apiEndpoints.shifts, { params: { date } });
+  const tz = new Date().getTimezoneOffset();
+  return axiosInstance.get(apiEndpoints.shifts, { params: { date, tz } });
 };
 
 export const getShiftApi = (id: number): Promise<ApiResponse<Shift>> => {

@@ -27,6 +27,7 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useShift, useEndShift } from 'services/shifts/shifts.hooks';
 import { useParams, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import paths from 'routes/paths';
 import dayjs from 'dayjs';
 import { ClosingMeterReadingInput, EndShiftPayload } from 'types/petrol-pump';
@@ -70,6 +71,7 @@ const ShiftDetailPage = () => {
 
     endShift.mutate({ id: shiftId, ...payload }, {
       onSuccess: () => {
+        toast.success('Shift ended successfully');
         setEndDialogOpen(false);
         router.push(paths.shifts);
       },
