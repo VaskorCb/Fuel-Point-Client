@@ -19,6 +19,7 @@ import {
 } from 'types/auth-and-onboarding';
 import { queryKeys } from 'services/queryKeys';
 import { loginApi, signupApi, logoutApi, sendPasswordResetLinkApi, resetPasswordApi } from './auth.api';
+import { setAuthCookies, clearAuthCookies } from 'actions/auth';
 import toast from 'react-hot-toast';
 
 export function useAuth() {
@@ -31,8 +32,11 @@ export function useAuth() {
   // Login mutation
   const loginMutation = useMutation<LoginResponseData, ApiError, LoginFormValues>({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      console.log("data", data);
+    onSuccess: async (data) => {
+      const tokens = data.data;
+      if (tokens?.accessToken && tokens?.refreshToken) {
+        await setAuthCookies(tokens.accessToken, tokens.refreshToken);
+      }
       setUser(data.data?.user || null);
       setAuthStatus('authenticated');
       queryClient.setQueryData(queryKeys.auth.profile, data.data?.user || null);
@@ -42,7 +46,11 @@ export function useAuth() {
   // Signup mutation
   const signupMutation = useMutation<SignupResponseData, ApiError, SignupFormValues>({
     mutationFn: signupApi,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      const tokens = data.data;
+      if (tokens?.accessToken && tokens?.refreshToken) {
+        await setAuthCookies(tokens.accessToken, tokens.refreshToken);
+      }
       setUser(data.data?.user || null);
       setAuthStatus('authenticated');
       queryClient.setQueryData(queryKeys.auth.profile, data.data?.user || null);
@@ -52,7 +60,8 @@ export function useAuth() {
   // Logout mutation
   const logoutMutation = useMutation<LogoutResponseData, ApiError, void>({
     mutationFn: logoutApi,
-    onSettled: () => {
+    onSettled: async () => {
+      await clearAuthCookies();
       setUser(null);
       setAuthStatus('unauthenticated');
       queryClient.removeQueries({ queryKey: [...queryKeys.auth.profile] });
